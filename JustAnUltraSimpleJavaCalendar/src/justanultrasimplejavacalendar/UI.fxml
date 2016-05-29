@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Menu?>
+
+<VBox id="vbox" prefHeight="400" prefWidth="800"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="justanultrasimplejavacalendar.UIController">
+   <MenuBar fx:id="menuBar">
+      <menus>
+         <Menu text="_Kalendarz">
+            <items>
+               <MenuItem text="Dodaj _nowe zdarzenie" onAction="#handleDodajAction"/>
+               <MenuItem text="_Usuń wg kryterium" onAction="#handleUsunDialogAction"/>
+               <MenuItem text="_Filtruj zdarzenia" onAction="#handleFiltrujDialogAction"/>
+               <SeparatorMenuItem  />
+               <Menu text="_Importuj">
+                  <items>
+                     <MenuItem text="Z formatu iCalendar" onAction="#handleImportICalendarAction"/>
+                     <MenuItem text="Z formatu XML" onAction="#handleImportXMLAction"/>
+                     <MenuItem text="Z bazy danych" onAction="#handleImportDatabaseAction"/>
+                  </items>
+               </Menu>
+               <Menu text="_Eksportuj">
+                  <items>
+                     <MenuItem text="Do formatu iCalendar" onAction="#handleExportICalendarAction"/>
+                     <MenuItem text="Do formatu XML" onAction="#handleExportXMLAction"/>
+                     <MenuItem text="Do bazy danych" onAction="#handleExportDatabaseAction"/>
+                  </items>
+               </Menu>
+               <SeparatorMenuItem  />
+               <MenuItem text="U_stawienia" onAction="#handleUstawieniaAction"/>
+               <MenuItem fx:id="wyjscieMenuItem" text="_Wyjście" onAction="#handleWyjscieAction"/>
+            </items>
+         </Menu>
+         <Menu text="O _programie" onAction="#handleAboutAction" />
+      </menus>
+   </MenuBar>
+</VBox>
