@@ -18,7 +18,6 @@ import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -37,16 +36,14 @@ public class UIController implements Initializable {
     @FXML private MenuItem wyjscieMenuItem;
     @FXML private GridPane tabelaDni;
     @FXML private Label data;
+    @FXML private GridPane komorkiKalendarza;
     private GregorianCalendar wybranyKalendarz = new GregorianCalendar();
     private StringProperty wybranaData = new SimpleStringProperty();
     public final String getWybranaData() {return wybranaData.get();}
     public final void setWybranaData(String value){wybranaData.set(value);}
     public StringProperty wybranaDataProperty() {return wybranaData;}
-    String dni[] = {"niedziela", "poniedziałek", "wtorek", "środa", "czwartek",
-        "piątek", "sobota"};
-    String miesiace[] = {"Styczeń", "Luty", "Marzec", "Kwiecień", "Maj",
-        "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad",
-        "Grudzień"};
+    String dni[] = {"pn", "wt", "śr", "cz",
+        "pt", "sb", "nd"};
 
     @FXML
     private void handleDodajAction(ActionEvent event) {
@@ -144,10 +141,23 @@ public class UIController implements Initializable {
         for (int i = 0; i < 7; i++) {
             Label l = new Label(dni[i]);
             l.setFont(Font.font("System", FontWeight.BOLD, 18));
-            l.setAlignment(Pos.CENTER);
+            //l.setAlignment(Pos.CENTER);
             tabelaDni.add(l, i, 0);
         }
         aktualizujDate();
+        aktualizujKomorki();
     }     
+
+    private void aktualizujKomorki() {
+        for(int i=0; i<7;i++) {
+            for(int j=0;j<6;j++) {
+                GregorianCalendar tmpCal = new GregorianCalendar();
+                tmpCal.set(Calendar.YEAR, wybranyKalendarz.get(Calendar.YEAR));
+                
+                komorkiKalendarza.add(new KomorkaController(tmpCal), i, j);
+            }
+            
+        }
+    }
     
 }
