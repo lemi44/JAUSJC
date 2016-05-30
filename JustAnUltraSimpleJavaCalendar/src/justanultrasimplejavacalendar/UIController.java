@@ -42,8 +42,8 @@ public class UIController implements Initializable {
     public final String getWybranaData() {return wybranaData.get();}
     public final void setWybranaData(String value){wybranaData.set(value);}
     public StringProperty wybranaDataProperty() {return wybranaData;}
-    String dni[] = {"pn", "wt", "śr", "cz",
-        "pt", "sb", "nd"};
+    String dni[] = {"nd", "pn", "wt", "śr", "cz",
+        "pt", "sb"};
 
     @FXML
     private void handleDodajAction(ActionEvent event) {
@@ -109,24 +109,28 @@ public class UIController implements Initializable {
     private void handlePrevMonthAction() {
         wybranyKalendarz.add(Calendar.MONTH, -1);
         aktualizujDate();
+        aktualizujKomorki();
     }
     
     @FXML
     private void handlePrevYearAction() {
         wybranyKalendarz.add(Calendar.YEAR, -1);
         aktualizujDate();
+        aktualizujKomorki();
     }
     
     @FXML
     private void handleNextMonthAction() {
         wybranyKalendarz.add(Calendar.MONTH, 1);
         aktualizujDate();
+        aktualizujKomorki();
     }
     
     @FXML
     private void handleNextYearAction() {
         wybranyKalendarz.add(Calendar.YEAR, 1);
         aktualizujDate();
+        aktualizujKomorki();
     }
     
     private void aktualizujDate() {
@@ -149,12 +153,16 @@ public class UIController implements Initializable {
     }     
 
     private void aktualizujKomorki() {
-        for(int i=0; i<7;i++) {
-            for(int j=0;j<6;j++) {
+        komorkiKalendarza.getChildren().clear();
+        for(int j=0; j<6;j++) {
+            for(int i=1;i<8;i++) {
                 GregorianCalendar tmpCal = new GregorianCalendar();
                 tmpCal.set(Calendar.YEAR, wybranyKalendarz.get(Calendar.YEAR));
-                
-                komorkiKalendarza.add(new KomorkaController(tmpCal), i, j);
+                tmpCal.set(Calendar.MONTH, wybranyKalendarz.get(Calendar.MONTH));
+                tmpCal.set(Calendar.DAY_OF_MONTH, 1);
+                int firstDayOffset = tmpCal.get(Calendar.DAY_OF_WEEK);
+                tmpCal.add(Calendar.DAY_OF_MONTH, firstDayOffset * -1 + (i + 7*j));
+                komorkiKalendarza.add(new KomorkaController(tmpCal), i - 1, j);
             }
             
         }

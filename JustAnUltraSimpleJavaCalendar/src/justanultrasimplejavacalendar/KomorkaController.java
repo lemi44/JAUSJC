@@ -31,7 +31,7 @@ public class KomorkaController extends VBox {
     
     public KomorkaController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
-"Komorka.fxml"));
+                "Komorka.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
@@ -40,7 +40,8 @@ public class KomorkaController extends VBox {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-        dzien.backgroundProperty().set(new Background(new BackgroundFill(Color.GREENYELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
+        dzien.backgroundProperty().set(new Background(new BackgroundFill(
+                Color.GREENYELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
         updateCell();
     }
     
@@ -59,7 +60,8 @@ public class KomorkaController extends VBox {
     }
     
     private void updateCell() {
-        dzien.textProperty().set(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
+        dzien.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
+        
     }
 
        
