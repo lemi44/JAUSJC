@@ -42,7 +42,11 @@
                <MenuItem fx:id="wyjscieMenuItem" onAction="#handleWyjscieAction" text="_Wyjście" />
             </items>
          </Menu>
-         <Menu onAction="#handleAboutAction" text="O _programie" />
+         <Menu text="_Pomoc" >
+             <items>
+                 <MenuItem onAction="#handleAboutAction" text="_O programie" />
+             </items>
+         </Menu>
       </menus>
    </MenuBar>
    <BorderPane>
