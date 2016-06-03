@@ -42,8 +42,8 @@ public class UIController implements Initializable {
     public final String getWybranaData() {return wybranaData.get();}
     public final void setWybranaData(String value){wybranaData.set(value);}
     public StringProperty wybranaDataProperty() {return wybranaData;}
-    String dni[] = {"nd", "pn", "wt", "śr", "cz",
-        "pt", "sb"};
+    String dni[] = {"pn", "wt", "śr", "cz",
+        "pt", "sb", "nd"};
 
     @FXML
     private void handleDodajAction(ActionEvent event) {
@@ -161,7 +161,12 @@ public class UIController implements Initializable {
                 tmpCal.set(Calendar.MONTH, wybranyKalendarz.get(Calendar.MONTH));
                 tmpCal.set(Calendar.DAY_OF_MONTH, 1);
                 int firstDayOffset = tmpCal.get(Calendar.DAY_OF_WEEK);
-                tmpCal.add(Calendar.DAY_OF_MONTH, firstDayOffset * -1 + (i + 7*j));
+                int przesuniecie = 0;
+                if(-firstDayOffset + 2 > 0)
+                    przesuniecie = -1;
+                else if(-firstDayOffset + 2 < -6)
+                    przesuniecie = 1;
+                tmpCal.add(Calendar.DAY_OF_MONTH, (firstDayOffset - 1) * -1 + (i + 7*j) + przesuniecie*7);
                 komorkiKalendarza.add(new KomorkaController(tmpCal), i - 1, j);
             }
             
