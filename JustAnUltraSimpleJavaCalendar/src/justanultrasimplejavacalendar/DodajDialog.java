@@ -69,7 +69,7 @@ public class DodajDialog extends Dialog<Zdarzenie>{
 
         if (dialogButton == potwierdzenieButtonType) {
             Date data = Date.from(dtstart.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Date data2 = Date.from(dtend.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date data2 = Date.from(dtend.getValue().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
             return new Zdarzenie(data,data2,summary.getText(), descript.getText()  );
         }
         return null;

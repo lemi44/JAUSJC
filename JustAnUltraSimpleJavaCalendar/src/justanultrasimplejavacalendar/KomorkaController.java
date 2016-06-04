@@ -29,7 +29,7 @@ public class KomorkaController extends VBox {
     @FXML private ListView listaZdarzen;
     private GregorianCalendar calendar = new GregorianCalendar();
     
-    public KomorkaController() {
+    public KomorkaController(KalendarzModel model) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
                 "Komorka.fxml"));
         fxmlLoader.setRoot(this);
@@ -42,28 +42,28 @@ public class KomorkaController extends VBox {
         }
         dzien.backgroundProperty().set(new Background(new BackgroundFill(
                 Color.GREENYELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
-        updateCell();
+        updateCell(model);
     }
     
-    public KomorkaController(GregorianCalendar cal) {
-        this();
-        setCalendar(cal);
+    public KomorkaController(GregorianCalendar cal, KalendarzModel model) {
+        this(model);
+        setCalendar(cal,model);
     }
     
-    public void setCalendar(GregorianCalendar calendar) {
+    public void setCalendar(GregorianCalendar calendar, KalendarzModel model) {
         this.calendar = calendar;
-        updateCell();
+        updateCell(model);
     }
     
     public GregorianCalendar getCalendar() {
         return calendar;
     }
     
-    private void updateCell() {
+    private void updateCell(KalendarzModel model) {
         dzien.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
-        
+        listaZdarzen.setItems(model.eventCheck(calendar.getTime()));
     }
-
+    
        
     
 }

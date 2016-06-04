@@ -56,6 +56,8 @@ public class UIController implements Initializable {
         Optional<Zdarzenie> result = dialog.showAndWait();
         result.ifPresent(ev -> {
         model.add(ev);
+        aktualizujDate();
+        aktualizujKomorki();
 });
     }
     
@@ -181,7 +183,7 @@ public class UIController implements Initializable {
                 else if(-firstDayOffset + 2 < -6)
                     przesuniecie = 1;
                 tmpCal.add(Calendar.DAY_OF_MONTH, (firstDayOffset - 1) * -1 + (i + 7*j) + przesuniecie*7);
-                komorkiKalendarza.add(new KomorkaController(tmpCal), i - 1, j);
+                komorkiKalendarza.add(new KomorkaController(tmpCal, model), i - 1, j);
             }
             
         }

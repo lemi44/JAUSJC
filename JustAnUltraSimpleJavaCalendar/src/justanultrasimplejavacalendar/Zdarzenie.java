@@ -65,7 +65,14 @@ public class Zdarzenie {
     public String getDescription() {
         return Description;
     }
-
+    public Boolean containsDate(Date d) {
+        if(dtstart.before(d) && d.before(dtend))
+        {
+            return true; 
+        }
+        else
+            return false;
+    }
     public void setDescription(String Description) {
         this.Description = Description;
     }

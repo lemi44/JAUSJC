@@ -6,7 +6,10 @@
 package justanultrasimplejavacalendar;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -27,4 +30,15 @@ public class KalendarzModel {
     {
         Kolekcja.remove(z);
     }
+    public ObservableList<String> eventCheck(Date d)
+    {
+        ObservableList<String> lista = FXCollections.observableArrayList();
+        Kolekcja.stream().filter((items) -> (items.containsDate(d))).forEach((items) -> {
+            String temp1 = items.getSummary();
+            String temp2 = items.getDescription();
+            lista.add(temp1 + ": " + temp2);
+        });
+        return lista;
+    }
+   
 }
