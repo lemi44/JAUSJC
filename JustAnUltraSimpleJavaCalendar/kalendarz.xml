@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_91" class="java.beans.XMLDecoder">
+ <object class="justanultrasimplejavacalendar.KalendarzModel" id="KalendarzModel0">
+  <void property="kolekcja">
+   <void method="add">
+    <object class="justanultrasimplejavacalendar.Zdarzenie">
+     <void property="description">
+      <string></string>
+     </void>
+     <void property="dtend">
+      <object class="java.util.Date">
+       <long>1465164000000</long>
+      </object>
+     </void>
+     <void property="dtstamp">
+      <object class="java.util.Date">
+       <long>1465149975324</long>
+      </object>
+     </void>
+     <void property="dtstart">
+      <object class="java.util.Date">
+       <long>1465077600000</long>
+      </object>
+     </void>
+     <void property="summary">
+      <string>2</string>
+     </void>
+     <void property="uid">
+      <null/>
+     </void>
+    </object>
+   </void>
+  </void>
+ </object>
+</java>

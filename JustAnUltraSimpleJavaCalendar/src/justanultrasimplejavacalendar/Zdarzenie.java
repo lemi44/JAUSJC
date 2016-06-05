@@ -5,15 +5,26 @@
  */
 package justanultrasimplejavacalendar;
 
+import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+
 
 /**
  *
  * @author Xsior
  */
-public class Zdarzenie {
-    private Date dtstamp;
 
+public class Zdarzenie implements Serializable{
+    private Date dtstamp;
+    public Zdarzenie(){
+        this.dtstamp = new Date(1990, 1, 1);
+        this.dtstart = new Date(1990, 1, 1);
+        this.dtend = new Date(1990, 1, 2);
+        this.uid = " ";
+        this.Summary = "Generic event";
+        this.Description = " ";
+    }
     public Zdarzenie(Date dtstamp, Date dtstart, Date dtend, String uid, String Summary, String Description) {
         this.dtstamp = dtstamp;
         this.dtstart = dtstart;

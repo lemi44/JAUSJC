@@ -49,6 +49,7 @@ public class UIController implements Initializable {
     @FXML private StringProperty wybranaData = new SimpleStringProperty();
     @FXML private KalendarzModel model = new KalendarzModel();
     @FXML private sqlSerializer sql;
+    @FXML private XMLSerializer xml;
     @FXML public final String getWybranaData() {return wybranaData.get();}
     @FXML public final void setWybranaData(String value){wybranaData.set(value);}
     @FXML public StringProperty wybranaDataProperty() {return wybranaData;}
@@ -89,7 +90,10 @@ public class UIController implements Initializable {
     
     @FXML
     private void handleImportXMLAction(ActionEvent event) {
-        
+        xml = new XMLSerializer();
+        model.fromXml(xml);
+        aktualizujDate();
+        aktualizujKomorki();
     }
     
     @FXML
@@ -112,7 +116,9 @@ public class UIController implements Initializable {
     
     @FXML
     private void handleExportXMLAction(ActionEvent event) {
-        
+        xml = new XMLSerializer();
+        model.toXml(xml);
+        xml.close();
     }
     
     @FXML

@@ -22,10 +22,19 @@ import javafx.fxml.FXML;
 public class KalendarzModel {
     @FXML Collection<Zdarzenie> Kolekcja;
 
+    public Collection<Zdarzenie> getKolekcja() {
+        return Kolekcja;
+    }
+
+    public void setKolekcja(Collection<Zdarzenie> Kolekcja) {
+        this.Kolekcja = Kolekcja;
+    }
+
     public KalendarzModel() {
         this.Kolekcja = new HashSet<Zdarzenie>();
         
     }
+    
     public void add(Zdarzenie z)
     {
         Kolekcja.add(z);
@@ -76,4 +85,19 @@ public class KalendarzModel {
            this.add(item);
        }
    }
+    public void toXml(XMLSerializer xml){
+        
+            xml.saveKalendarz(this);
+        }
+            
+    
+    public void fromXml(XMLSerializer xml){
+        
+             readFromKalendarz(xml.loadKalendarz());
+    }
+    private void readFromKalendarz(KalendarzModel k){
+        Kolekcja.addAll(k.getKolekcja());
+    }
+            
+    
 }
