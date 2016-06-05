@@ -24,12 +24,18 @@ import java.util.List;
  */
 public class sqlSerializer {
     public static final String DRIVER = "org.sqlite.JDBC";
-    public static final String DB_URL = "jdbc:sqlite:biblioteka.db";
+    public static final String DB_URL = "jdbc:sqlite:kalendarz.db";
 
     private Connection conn;
     private Statement stat;
     
     public sqlSerializer() {
+        connect();
+ 
+        createTables();
+    }
+    public void connect()
+    {
         try {
             Class.forName(sqlSerializer.DRIVER);
         } catch (ClassNotFoundException e) {
@@ -43,9 +49,7 @@ public class sqlSerializer {
         } catch (SQLException e) {
             System.err.println("Problem z otwarciem polaczenia");
             e.printStackTrace();
-        }
- 
-        createTables();
+        } 
     }
     public boolean createTables()
     {
@@ -111,4 +115,8 @@ public class sqlSerializer {
             e.printStackTrace();
         }
     }
+    public void delZdarzenia() throws SQLException {
+        stat.executeUpdate("delete from zdarzenia");
+    }
+    
 }

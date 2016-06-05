@@ -6,6 +6,7 @@
 package justanultrasimplejavacalendar;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -93,6 +94,7 @@ public class UIController implements Initializable {
     
     @FXML
     private void handleImportDatabaseAction(ActionEvent event) {
+        sql.connect();
         try {
             model.addSet(sql.selectZdarzenia());
         } catch (ParseException ex) {
@@ -115,10 +117,16 @@ public class UIController implements Initializable {
     @FXML
     private void handleExportDatabaseAction(ActionEvent event) {
         try {
+            sql.delZdarzenia();
+        } catch (SQLException ex) {
+            Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
             model.toSql(sql);
         } catch (ParseException ex) {
             Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        sql.closeConnection();
     }
     
     @FXML
