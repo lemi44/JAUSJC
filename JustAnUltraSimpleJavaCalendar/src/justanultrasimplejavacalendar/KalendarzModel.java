@@ -5,18 +5,22 @@
  */
 package justanultrasimplejavacalendar;
 
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 
 /**
  *
  * @author Xsior
  */
 public class KalendarzModel {
-    Collection<Zdarzenie> Kolekcja;
+    @FXML Collection<Zdarzenie> Kolekcja;
 
     public KalendarzModel() {
         this.Kolekcja = new HashSet<Zdarzenie>();
@@ -30,6 +34,20 @@ public class KalendarzModel {
     {
         Kolekcja.remove(z);
     }
+    public void delByDate(Date d)
+    {
+        for(Zdarzenie item: Kolekcja)
+        {
+            if(!item.getDtend().after(d))
+            {
+                this.del(item);
+            }
+        }
+    }
+    public void addSet(HashSet<Zdarzenie> h)
+    {
+        Kolekcja.addAll(h);
+    }
     public ObservableList<Zdarzenie> eventCheck(Date d)
     {
         ObservableList<Zdarzenie> lista = FXCollections.observableArrayList();
@@ -38,5 +56,14 @@ public class KalendarzModel {
         });
         return lista;
     }
-   
+   public void toSql(sqlSerializer sql) throws ParseException
+   {
+            HashSet<Zdarzenie> z = sql.selectZdarzenia();
+
+       for(Zdarzenie item : Kolekcja)
+       {
+           if(!z.contains(item))
+           sql.insertZdarzenie(item);
+       }
+   }
 }

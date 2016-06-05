@@ -14,6 +14,15 @@ import java.util.Date;
 public class Zdarzenie {
     private Date dtstamp;
 
+    public Zdarzenie(Date dtstamp, Date dtstart, Date dtend, String uid, String Summary, String Description) {
+        this.dtstamp = dtstamp;
+        this.dtstart = dtstart;
+        this.dtend = dtend;
+        this.uid = uid;
+        this.Summary = Summary;
+        this.Description = Description;
+    }
+
     public Zdarzenie(Date dtstart, Date dtend, String Summary, String Description) {
         this.dtstart = dtstart;
         this.dtend = dtend;

@@ -30,9 +30,9 @@ import javafx.util.Pair;
 public class KomorkaController extends VBox {
     @FXML private Label dzien;
     @FXML private ListView listaZdarzen;
-    private ObservableList<Pair<String,Zdarzenie>> prawdziwaListaZdarzen;
+    @FXML private ObservableList<Pair<String,Zdarzenie>> prawdziwaListaZdarzen;
     //private ObservableList<Zdarzenie> prawdziwaListaZdarzen;
-    private GregorianCalendar calendar = new GregorianCalendar();
+    @FXML private GregorianCalendar calendar = new GregorianCalendar();
     
     public KomorkaController(KalendarzModel model) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(

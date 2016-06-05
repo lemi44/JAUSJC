@@ -7,12 +7,15 @@ package justanultrasimplejavacalendar;
 
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -41,12 +44,13 @@ public class UIController implements Initializable {
     @FXML private GridPane tabelaDni;
     @FXML private Label data;
     @FXML private GridPane komorkiKalendarza;
-    private GregorianCalendar wybranyKalendarz = new GregorianCalendar();
-    private StringProperty wybranaData = new SimpleStringProperty();
-    private KalendarzModel model = new KalendarzModel();
-    public final String getWybranaData() {return wybranaData.get();}
-    public final void setWybranaData(String value){wybranaData.set(value);}
-    public StringProperty wybranaDataProperty() {return wybranaData;}
+    @FXML private GregorianCalendar wybranyKalendarz = new GregorianCalendar();
+    @FXML private StringProperty wybranaData = new SimpleStringProperty();
+    @FXML private KalendarzModel model = new KalendarzModel();
+    @FXML private sqlSerializer sql;
+    @FXML public final String getWybranaData() {return wybranaData.get();}
+    @FXML public final void setWybranaData(String value){wybranaData.set(value);}
+    @FXML public StringProperty wybranaDataProperty() {return wybranaData;}
     String dni[] = {"pn", "wt", "śr", "cz",
         "pt", "sb", "nd"};
 
@@ -55,15 +59,21 @@ public class UIController implements Initializable {
         Dialog<Zdarzenie> dialog = new DodajDialog();
         Optional<Zdarzenie> result = dialog.showAndWait();
         result.ifPresent(ev -> {
-        model.add(ev);
-        aktualizujDate();
-        aktualizujKomorki();
-});
+            model.add(ev);
+            aktualizujDate();
+            aktualizujKomorki();
+        });
     }
     
     @FXML
     private void handleUsunDialogAction(ActionEvent event) {
-        
+        Dialog<Date> dialog = new UsunDialog();
+        Optional<Date> result = dialog.showAndWait();
+        result.ifPresent(ev -> {
+            model.delByDate(ev);
+            aktualizujDate();
+            aktualizujKomorki();
+        });
     }
     
     @FXML
@@ -83,7 +93,13 @@ public class UIController implements Initializable {
     
     @FXML
     private void handleImportDatabaseAction(ActionEvent event) {
-        
+        try {
+            model.addSet(sql.selectZdarzenia());
+        } catch (ParseException ex) {
+            Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        aktualizujDate();
+        aktualizujKomorki();
     }
     
     @FXML
@@ -98,7 +114,11 @@ public class UIController implements Initializable {
     
     @FXML
     private void handleExportDatabaseAction(ActionEvent event) {
-        
+        try {
+            model.toSql(sql);
+        } catch (ParseException ex) {
+            Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @FXML
@@ -166,6 +186,7 @@ public class UIController implements Initializable {
         }
         aktualizujDate();
         aktualizujKomorki();
+        sql = new sqlSerializer();
     }     
 
     private void aktualizujKomorki() {
