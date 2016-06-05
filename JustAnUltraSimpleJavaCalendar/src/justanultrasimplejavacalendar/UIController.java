@@ -95,8 +95,9 @@ public class UIController implements Initializable {
     @FXML
     private void handleImportDatabaseAction(ActionEvent event) {
         sql.connect();
+        
         try {
-            model.addSet(sql.selectZdarzenia());
+            model.fromSql(sql);
         } catch (ParseException ex) {
             Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
         }

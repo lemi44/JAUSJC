@@ -66,4 +66,14 @@ public class KalendarzModel {
            sql.insertZdarzenie(item);
        }
    }
+    public void fromSql(sqlSerializer sql) throws ParseException
+   {
+            HashSet<Zdarzenie> z = sql.selectZdarzenia();
+
+       for(Zdarzenie item : z)
+       {
+           if(!Kolekcja.contains(item))
+           this.add(item);
+       }
+   }
 }
