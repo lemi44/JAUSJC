@@ -53,57 +53,57 @@ public class UIController implements Initializable {
     }
     
     @FXML
-    private void handleUsunDialogAction() {
+    private void handleUsunDialogAction(ActionEvent event) {
         
     }
     
     @FXML
-    private void handleFiltrujDialogAction() {
+    private void handleFiltrujDialogAction(ActionEvent event) {
         
     }
     
     @FXML
-    private void handleImportICalendarAction() {
+    private void handleImportICalendarAction(ActionEvent event) {
         
     }
     
     @FXML
-    private void handleImportXMLAction() {
+    private void handleImportXMLAction(ActionEvent event) {
         
     }
     
     @FXML
-    private void handleImportDatabaseAction() {
+    private void handleImportDatabaseAction(ActionEvent event) {
         
     }
     
     @FXML
-    private void handleExportICalendarAction() {
+    private void handleExportICalendarAction(ActionEvent event) {
         
     }
     
     @FXML
-    private void handleExportXMLAction() {
+    private void handleExportXMLAction(ActionEvent event) {
         
     }
     
     @FXML
-    private void handleExportDatabaseAction() {
+    private void handleExportDatabaseAction(ActionEvent event) {
         
     }
     
     @FXML
-    private void handleUstawieniaAction() {
+    private void handleUstawieniaAction(ActionEvent event) {
         
     }
     
     @FXML
-    private void handleWyjscieAction() {
+    private void handleWyjscieAction(ActionEvent event) {
         Platform.exit();
     }
     
     @FXML
-    private void handleAboutAction() {
+    private void handleAboutAction(ActionEvent event) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
         alert.setHeaderText("Look, an Information Dialog");
@@ -113,28 +113,28 @@ public class UIController implements Initializable {
     }
     
     @FXML
-    private void handlePrevMonthAction() {
+    private void handlePrevMonthAction(ActionEvent event) {
         wybranyKalendarz.add(Calendar.MONTH, -1);
         aktualizujDate();
         aktualizujKomorki();
     }
     
     @FXML
-    private void handlePrevYearAction() {
+    private void handlePrevYearAction(ActionEvent event) {
         wybranyKalendarz.add(Calendar.YEAR, -1);
         aktualizujDate();
         aktualizujKomorki();
     }
     
     @FXML
-    private void handleNextMonthAction() {
+    private void handleNextMonthAction(ActionEvent event) {
         wybranyKalendarz.add(Calendar.MONTH, 1);
         aktualizujDate();
         aktualizujKomorki();
     }
     
     @FXML
-    private void handleNextYearAction() {
+    private void handleNextYearAction(ActionEvent event) {
         wybranyKalendarz.add(Calendar.YEAR, 1);
         aktualizujDate();
         aktualizujKomorki();
