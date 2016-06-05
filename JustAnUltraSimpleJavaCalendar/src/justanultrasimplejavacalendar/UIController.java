@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,6 +21,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -41,6 +43,7 @@ public class UIController implements Initializable {
     @FXML private GridPane komorkiKalendarza;
     private GregorianCalendar wybranyKalendarz = new GregorianCalendar();
     private StringProperty wybranaData = new SimpleStringProperty();
+    private KalendarzModel model = new KalendarzModel();
     public final String getWybranaData() {return wybranaData.get();}
     public final void setWybranaData(String value){wybranaData.set(value);}
     public StringProperty wybranaDataProperty() {return wybranaData;}
@@ -49,7 +52,13 @@ public class UIController implements Initializable {
 
     @FXML
     private void handleDodajAction(ActionEvent event) {
-        
+        Dialog<Zdarzenie> dialog = new DodajDialog();
+        Optional<Zdarzenie> result = dialog.showAndWait();
+        result.ifPresent(ev -> {
+        model.add(ev);
+        aktualizujDate();
+        aktualizujKomorki();
+});
     }
     
     @FXML
@@ -174,7 +183,7 @@ public class UIController implements Initializable {
                 else if(-firstDayOffset + 2 < -6)
                     przesuniecie = 1;
                 tmpCal.add(Calendar.DAY_OF_MONTH, (firstDayOffset - 1) * -1 + (i + 7*j) + przesuniecie*7);
-                komorkiKalendarza.add(new KomorkaController(tmpCal), i - 1, j);
+                komorkiKalendarza.add(new KomorkaController(tmpCal, model), i - 1, j);
             }
             
         }
