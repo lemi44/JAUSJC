@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -29,6 +30,8 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
@@ -80,7 +83,12 @@ public class UIController implements Initializable {
     
     @FXML
     private void handleFiltrujDialogAction(ActionEvent event) {
-        
+        Dialog<HashSet<Zdarzenie>> dialog;
+        dialog = new FiltrujDialog((HashSet<Zdarzenie>) model.getKolekcja());
+        Optional<HashSet<Zdarzenie>> result = dialog.showAndWait();
+        result.ifPresent(ev -> {
+            Alert x = new WyszukaneAlert(ev,AlertType.NONE);
+        });
     }
     
     @FXML

@@ -25,7 +25,7 @@ public class UsunDialog extends Dialog<Date> {
         super();
         this.setTitle("Usuwanie zdarzenia");
         this.setHeaderText("Prosze podać datę przed którą zdarzenia mają być usunięte");
-        ButtonType potwierdzenieButtonType = new ButtonType("Dodaj", ButtonBar.ButtonData.OK_DONE);
+        ButtonType potwierdzenieButtonType = new ButtonType("Usuń", ButtonBar.ButtonData.OK_DONE);
         this.getDialogPane().getButtonTypes().addAll(potwierdzenieButtonType, ButtonType.CANCEL);
         GridPane grid = new GridPane();
         grid.setHgap(10);

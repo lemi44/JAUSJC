@@ -45,7 +45,8 @@ public class KalendarzModel {
     }
     public void delByDate(Date d)
     {
-        for(Zdarzenie item: Kolekcja)
+        HashSet<Zdarzenie> tmp =  new HashSet<Zdarzenie>(Kolekcja);
+        for(Zdarzenie item: tmp)
         {
             if(!item.getDtend().after(d))
             {
@@ -77,13 +78,8 @@ public class KalendarzModel {
    }
     public void fromSql(sqlSerializer sql) throws ParseException
    {
-            HashSet<Zdarzenie> z = sql.selectZdarzenia();
+            Kolekcja = sql.selectZdarzenia();
 
-       for(Zdarzenie item : z)
-       {
-           if(!Kolekcja.contains(item))
-           this.add(item);
-       }
    }
     public void toXml(XMLSerializer xml){
         
@@ -93,10 +89,7 @@ public class KalendarzModel {
     
     public void fromXml(XMLSerializer xml){
         
-             readFromKalendarz(xml.loadKalendarz());
-    }
-    private void readFromKalendarz(KalendarzModel k){
-        Kolekcja.addAll(k.getKolekcja());
+              Kolekcja=xml.loadKalendarz().getKolekcja();
     }
             
     
