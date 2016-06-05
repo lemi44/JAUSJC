@@ -63,18 +63,14 @@ public class DodajDialog extends Dialog<Zdarzenie>{
         this.getDialogPane().setContent(grid);
 
         Platform.runLater(() -> summary.requestFocus());
-        this.setResultConverter(new Callback<ButtonType, Zdarzenie>() {
-        @Override
-        public Zdarzenie call(ButtonType dialogButton){
-
-        if (dialogButton == potwierdzenieButtonType) {
-            Date data = Date.from(dtstart.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Date data2 = Date.from(dtend.getValue().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            return new Zdarzenie(data,data2,summary.getText(), descript.getText()  );
-        }
-        return null;
+        this.setResultConverter((ButtonType dialogButton) -> {
+            if (dialogButton == potwierdzenieButtonType) {
+                Date data = Date.from(dtstart.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                Date data2 = Date.from(dtend.getValue().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+                return new Zdarzenie(data,data2,summary.getText(), descript.getText()  );
             }
-});
+            return null;
+        });
 
 
         

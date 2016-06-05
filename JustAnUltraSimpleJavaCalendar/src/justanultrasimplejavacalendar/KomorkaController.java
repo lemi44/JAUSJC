@@ -8,6 +8,8 @@ package justanultrasimplejavacalendar;
 import java.io.*;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -18,6 +20,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.util.Pair;
 
 /**
  * FXML Controller class
@@ -27,6 +30,8 @@ import javafx.scene.paint.Color;
 public class KomorkaController extends VBox {
     @FXML private Label dzien;
     @FXML private ListView listaZdarzen;
+    private ObservableList<Pair<String,Zdarzenie>> prawdziwaListaZdarzen;
+    //private ObservableList<Zdarzenie> prawdziwaListaZdarzen;
     private GregorianCalendar calendar = new GregorianCalendar();
     
     public KomorkaController(KalendarzModel model) {
@@ -42,6 +47,7 @@ public class KomorkaController extends VBox {
         }
         dzien.backgroundProperty().set(new Background(new BackgroundFill(
                 Color.GREENYELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
+        prawdziwaListaZdarzen = FXCollections.observableArrayList();
         updateCell(model);
     }
     
@@ -61,7 +67,25 @@ public class KomorkaController extends VBox {
     
     private void updateCell(KalendarzModel model) {
         dzien.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
-        listaZdarzen.setItems(model.eventCheck(calendar.getTime()));
+        prawdziwaListaZdarzen.clear();
+        ObservableList<Zdarzenie> lista = model.eventCheck(calendar.getTime());
+        ObservableList<String> listaStringow = FXCollections.observableArrayList();
+        lista.forEach(item -> {
+            String temp = item.getSummary();
+            String temp2;
+            do {
+                temp2 = temp;
+            prawdziwaListaZdarzen.forEach(pair -> {
+                if(temp == pair.getKey())
+                    temp.concat("_");
+            });
+            } while (temp2 != temp);
+            prawdziwaListaZdarzen.add(new Pair(temp,item));
+            listaStringow.add(temp);
+        });
+        // TODO: Zastąpić stringi klasą pochodną po ListCell, aby zastąpić ten
+        //  workaround z parami String,Zdarzenie
+        listaZdarzen.setItems(listaStringow);
     }
     
        

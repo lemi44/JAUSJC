@@ -30,13 +30,11 @@ public class KalendarzModel {
     {
         Kolekcja.remove(z);
     }
-    public ObservableList<String> eventCheck(Date d)
+    public ObservableList<Zdarzenie> eventCheck(Date d)
     {
-        ObservableList<String> lista = FXCollections.observableArrayList();
-        Kolekcja.stream().filter((items) -> (items.containsDate(d))).forEach((items) -> {
-            String temp1 = items.getSummary();
-            String temp2 = items.getDescription();
-            lista.add(temp1 + ": " + temp2);
+        ObservableList<Zdarzenie> lista = FXCollections.observableArrayList();
+        Kolekcja.stream().filter((items) -> (items.containsDate(d))).forEach((item) -> {
+            lista.add(item);
         });
         return lista;
     }
