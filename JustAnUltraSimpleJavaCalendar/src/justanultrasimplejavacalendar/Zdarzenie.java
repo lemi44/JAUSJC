@@ -8,6 +8,8 @@ package justanultrasimplejavacalendar;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.UUID;
 
 
 /**
@@ -18,10 +20,10 @@ import java.util.Date;
 public class Zdarzenie implements Serializable{
     private Date dtstamp;
     public Zdarzenie(){
-        this.dtstamp = new Date(1990, 1, 1);
-        this.dtstart = new Date(1990, 1, 1);
-        this.dtend = new Date(1990, 1, 2);
-        this.uid = " ";
+        this.dtstamp = new GregorianCalendar(1990, 1, 1).getTime();
+        this.dtstart = new GregorianCalendar(1990, 1, 1).getTime();
+        this.dtend = new GregorianCalendar(1990, 1, 2).getTime();
+        this.uid = UUID.randomUUID();
         this.Summary = "Generic event";
         this.Description = " ";
     }
@@ -29,7 +31,7 @@ public class Zdarzenie implements Serializable{
         this.dtstamp = dtstamp;
         this.dtstart = dtstart;
         this.dtend = dtend;
-        this.uid = uid;
+        this.uid = UUID.fromString(uid);
         this.Summary = Summary;
         this.Description = Description;
     }
@@ -40,6 +42,7 @@ public class Zdarzenie implements Serializable{
         this.Summary = Summary;
         this.Description = Description;
         this.dtstamp = new Date();
+        this.uid = UUID.randomUUID();
     }
 
     public Date getDtstamp() {
@@ -67,11 +70,11 @@ public class Zdarzenie implements Serializable{
     }
 
     public String getUid() {
-        return uid;
+        return uid.toString();
     }
 
     public void setUid(String uid) {
-        this.uid = uid;
+        this.uid = UUID.fromString(uid);
     }
 
     public String getSummary() {
@@ -98,7 +101,7 @@ public class Zdarzenie implements Serializable{
     }
     private Date dtstart;
     private Date dtend;
-    private String uid;
+    private UUID uid;
     private String Summary;
     private String Description;
 }
