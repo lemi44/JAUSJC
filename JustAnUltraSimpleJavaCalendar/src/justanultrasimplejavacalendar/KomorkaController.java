@@ -68,7 +68,7 @@ public class KomorkaController extends VBox {
     private void updateCell(KalendarzModel model) {
         dzien.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
         prawdziwaListaZdarzen.clear();
-        ObservableList<Zdarzenie> lista = model.eventCheck(calendar.getTime());
+        ObservableList<Zdarzenie> lista = model.eventCheck(calendar);
         ObservableList<String> listaStringow = FXCollections.observableArrayList();
         lista.forEach(item -> {
             String temp = item.getSummary();

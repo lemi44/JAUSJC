@@ -1,116 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="1.8.0_91" class="java.beans.XMLDecoder">
+<java version="1.8.0_92" class="java.beans.XMLDecoder">
  <object class="justanultrasimplejavacalendar.KalendarzModel" id="KalendarzModel0">
   <void property="kolekcja">
    <void method="add">
     <object class="justanultrasimplejavacalendar.Zdarzenie">
      <void property="description">
-      <string>i tyle</string>
+      <string>opis</string>
      </void>
      <void property="dtend">
-      <object class="java.util.Date">
-       <long>1465682400000</long>
-      </object>
-     </void>
-     <void property="dtstamp">
-      <object class="java.util.Date">
-       <long>1465159321282</long>
-      </object>
-     </void>
-     <void property="dtstart">
       <object class="java.util.Date">
        <long>1465250400000</long>
       </object>
      </void>
-     <void property="summary">
-      <string>Pszemek2</string>
-     </void>
-     <void property="uid">
-      <null/>
-     </void>
-    </object>
-   </void>
-   <void method="add">
-    <object class="justanultrasimplejavacalendar.Zdarzenie">
-     <void property="description">
-      <string>jest fajny</string>
-     </void>
-     <void property="dtend">
-      <object class="java.util.Date">
-       <long>1465509600000</long>
-      </object>
-     </void>
      <void property="dtstamp">
       <object class="java.util.Date">
-       <long>1465159287263</long>
+       <long>1465204105456</long>
       </object>
      </void>
      <void property="dtstart">
       <object class="java.util.Date">
-       <long>1465077600000</long>
+       <long>1465164000000</long>
       </object>
      </void>
      <void property="summary">
-      <string>Pszemek</string>
+      <string>Zdarzenie</string>
      </void>
      <void property="uid">
-      <null/>
-     </void>
-    </object>
-   </void>
-   <void method="add">
-    <object class="justanultrasimplejavacalendar.Zdarzenie">
-     <void property="description">
-      <string>to Pszemek</string>
-     </void>
-     <void property="dtend">
-      <object class="java.util.Date">
-       <long>1466114400000</long>
-      </object>
-     </void>
-     <void property="dtstamp">
-      <object class="java.util.Date">
-       <long>1465159300534</long>
-      </object>
-     </void>
-     <void property="dtstart">
-      <object class="java.util.Date">
-       <long>1465509600000</long>
-      </object>
-     </void>
-     <void property="summary">
-      <string>Tak</string>
-     </void>
-     <void property="uid">
-      <null/>
-     </void>
-    </object>
-   </void>
-   <void method="add">
-    <object class="justanultrasimplejavacalendar.Zdarzenie">
-     <void property="description">
-      <string>i tak</string>
-     </void>
-     <void property="dtend">
-      <object class="java.util.Date">
-       <long>1466805600000</long>
-      </object>
-     </void>
-     <void property="dtstamp">
-      <object class="java.util.Date">
-       <long>1465159334514</long>
-      </object>
-     </void>
-     <void property="dtstart">
-      <object class="java.util.Date">
-       <long>1465509600000</long>
-      </object>
-     </void>
-     <void property="summary">
-      <string>Nie</string>
-     </void>
-     <void property="uid">
-      <null/>
+      <string>d135e0bc-c684-4396-b101-f0c45f21e840</string>
      </void>
     </object>
    </void>

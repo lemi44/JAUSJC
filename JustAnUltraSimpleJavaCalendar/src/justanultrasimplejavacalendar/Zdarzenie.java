@@ -18,16 +18,16 @@ import java.util.UUID;
  */
 
 public class Zdarzenie implements Serializable{
-    private Date dtstamp;
+    private Calendar dtstamp;
     public Zdarzenie(){
-        this.dtstamp = new GregorianCalendar(1990, 1, 1).getTime();
-        this.dtstart = new GregorianCalendar(1990, 1, 1).getTime();
-        this.dtend = new GregorianCalendar(1990, 1, 2).getTime();
+        this.dtstamp = new GregorianCalendar(1990, 1, 1);
+        this.dtstart = new GregorianCalendar(1990, 1, 1);
+        this.dtend = new GregorianCalendar(1990, 1, 2);
         this.uid = UUID.randomUUID();
         this.Summary = "Generic event";
         this.Description = " ";
     }
-    public Zdarzenie(Date dtstamp, Date dtstart, Date dtend, String uid, String Summary, String Description) {
+    public Zdarzenie(Calendar dtstamp, Calendar dtstart, Calendar dtend, String uid, String Summary, String Description) {
         this.dtstamp = dtstamp;
         this.dtstart = dtstart;
         this.dtend = dtend;
@@ -36,36 +36,36 @@ public class Zdarzenie implements Serializable{
         this.Description = Description;
     }
 
-    public Zdarzenie(Date dtstart, Date dtend, String Summary, String Description) {
+    public Zdarzenie(Calendar dtstart, Calendar dtend, String Summary, String Description) {
         this.dtstart = dtstart;
         this.dtend = dtend;
         this.Summary = Summary;
         this.Description = Description;
-        this.dtstamp = new Date();
+        this.dtstamp = new GregorianCalendar();
         this.uid = UUID.randomUUID();
     }
 
-    public Date getDtstamp() {
+    public Calendar getDtstamp() {
         return dtstamp;
     }
 
-    public void setDtstamp(Date dtstamp) {
+    public void setDtstamp(Calendar dtstamp) {
         this.dtstamp = dtstamp;
     }
 
-    public Date getDtstart() {
+    public Calendar getDtstart() {
         return dtstart;
     }
 
-    public void setDtstart(Date dtstart) {
+    public void setDtstart(Calendar dtstart) {
         this.dtstart = dtstart;
     }
 
-    public Date getDtend() {
+    public Calendar getDtend() {
         return dtend;
     }
 
-    public void setDtend(Date dtend) {
+    public void setDtend(Calendar dtend) {
         this.dtend = dtend;
     }
 
@@ -88,7 +88,7 @@ public class Zdarzenie implements Serializable{
     public String getDescription() {
         return Description;
     }
-    public Boolean containsDate(Date d) {
+    public Boolean containsDate(Calendar d) {
         if(dtstart.before(d) && d.before(dtend))
         {
             return true; 
@@ -99,8 +99,8 @@ public class Zdarzenie implements Serializable{
     public void setDescription(String Description) {
         this.Description = Description;
     }
-    private Date dtstart;
-    private Date dtend;
+    private Calendar dtstart;
+    private Calendar dtend;
     private UUID uid;
     private String Summary;
     private String Description;

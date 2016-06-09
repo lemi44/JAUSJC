@@ -15,6 +15,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,14 +24,14 @@ import java.util.List;
  *
  * @author Xsior
  */
-public class sqlSerializer {
+public class SQLSerializer {
     public static final String DRIVER = "org.sqlite.JDBC";
     public static final String DB_URL = "jdbc:sqlite:kalendarz.db";
 
     private Connection conn;
     private Statement stat;
     
-    public sqlSerializer() {
+    public SQLSerializer() {
         connect();
  
         createTables();
@@ -37,7 +39,7 @@ public class sqlSerializer {
     public void connect()
     {
         try {
-            Class.forName(sqlSerializer.DRIVER);
+            Class.forName(SQLSerializer.DRIVER);
         } catch (ClassNotFoundException e) {
             System.err.println("Brak sterownika JDBC");
             e.printStackTrace();
@@ -99,7 +101,13 @@ public class sqlSerializer {
                 dtstamp = result.getString("dtstamp");
                 dtstart = result.getString("dtstart");
                 dtend = result.getString("dtend");
-                set.add(new Zdarzenie(df.parse(dtstamp),df.parse(dtstart),df.parse(dtend),uid,summary,description));
+                Calendar dtStampCal = new GregorianCalendar();
+                dtStampCal.setTime(df.parse(dtstamp));
+                Calendar dtStartCal = new GregorianCalendar();
+                dtStartCal.setTime(df.parse(dtstart));
+                Calendar dtEndCal = new GregorianCalendar();
+                dtEndCal.setTime(df.parse(dtend));
+                set.add(new Zdarzenie(dtStampCal,dtStartCal,dtEndCal,uid,summary,description));
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -7,7 +7,8 @@ package justanultrasimplejavacalendar;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -65,8 +66,8 @@ public class DodajDialog extends Dialog<Zdarzenie>{
         Platform.runLater(() -> summary.requestFocus());
         this.setResultConverter((ButtonType dialogButton) -> {
             if (dialogButton == potwierdzenieButtonType) {
-                Date data = Date.from(dtstart.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-                Date data2 = Date.from(dtend.getValue().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+                Calendar data = GregorianCalendar.from(dtstart.getValue().atStartOfDay(ZoneId.systemDefault()));
+                Calendar data2 = GregorianCalendar.from(dtend.getValue().plusDays(1).atStartOfDay(ZoneId.systemDefault()));
                 return new Zdarzenie(data,data2,summary.getText(), descript.getText()  );
             }
             return null;

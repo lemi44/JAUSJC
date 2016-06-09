@@ -48,14 +48,13 @@ public class UIController implements Initializable {
     @FXML private GridPane tabelaDni;
     @FXML private Label data;
     @FXML private GridPane komorkiKalendarza;
-    @FXML private GregorianCalendar wybranyKalendarz = new GregorianCalendar();
-    @FXML private StringProperty wybranaData = new SimpleStringProperty();
-    @FXML private KalendarzModel model = new KalendarzModel();
-    @FXML private sqlSerializer sql;
-    @FXML private XMLSerializer xml;
-    @FXML public final String getWybranaData() {return wybranaData.get();}
-    @FXML public final void setWybranaData(String value){wybranaData.set(value);}
-    @FXML public StringProperty wybranaDataProperty() {return wybranaData;}
+    private GregorianCalendar wybranyKalendarz = new GregorianCalendar();
+    private StringProperty wybranaData = new SimpleStringProperty();
+    private KalendarzModel model = new KalendarzModel();
+    private SQLSerializer sql;
+    public final String getWybranaData() {return wybranaData.get();}
+    public final void setWybranaData(String value){wybranaData.set(value);}
+    public StringProperty wybranaDataProperty() {return wybranaData;}
     String dni[] = {"pn", "wt", "śr", "cz",
         "pt", "sb", "nd"};
 
@@ -72,8 +71,8 @@ public class UIController implements Initializable {
     
     @FXML
     private void handleUsunDialogAction(ActionEvent event) {
-        Dialog<Date> dialog = new UsunDialog();
-        Optional<Date> result = dialog.showAndWait();
+        Dialog<Calendar> dialog = new UsunDialog();
+        Optional<Calendar> result = dialog.showAndWait();
         result.ifPresent(ev -> {
             model.delByDate(ev);
             aktualizujDate();
@@ -93,11 +92,15 @@ public class UIController implements Initializable {
     
     @FXML
     private void handleImportICalendarAction(ActionEvent event) {
-        
+        ICalendarSerializer cal = new ICalendarSerializer();
+        model = cal.loadKalendarz();
+        aktualizujDate();
+        aktualizujKomorki();
     }
     
     @FXML
     private void handleImportXMLAction(ActionEvent event) {
+        XMLSerializer xml;
         xml = new XMLSerializer();
         model.fromXml(xml);
         aktualizujDate();
@@ -119,11 +122,13 @@ public class UIController implements Initializable {
     
     @FXML
     private void handleExportICalendarAction(ActionEvent event) {
-        
+        ICalendarSerializer cal = new ICalendarSerializer();
+        cal.saveKalendarz(model);
     }
     
     @FXML
     private void handleExportXMLAction(ActionEvent event) {
+        XMLSerializer xml;
         xml = new XMLSerializer();
         model.toXml(xml);
         xml.close();
@@ -209,7 +214,7 @@ public class UIController implements Initializable {
         }
         aktualizujDate();
         aktualizujKomorki();
-        sql = new sqlSerializer();
+        sql = new SQLSerializer();
     }     
 
     private void aktualizujKomorki() {

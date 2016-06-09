@@ -7,7 +7,7 @@ package justanultrasimplejavacalendar;
 
 import java.text.ParseException;
 import java.util.Collection;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +43,7 @@ public class KalendarzModel {
     {
         Kolekcja.remove(z);
     }
-    public void delByDate(Date d)
+    public void delByDate(Calendar d)
     {
         HashSet<Zdarzenie> tmp =  new HashSet<Zdarzenie>(Kolekcja);
         for(Zdarzenie item: tmp)
@@ -58,7 +58,7 @@ public class KalendarzModel {
     {
         Kolekcja.addAll(h);
     }
-    public ObservableList<Zdarzenie> eventCheck(Date d)
+    public ObservableList<Zdarzenie> eventCheck(Calendar d)
     {
         ObservableList<Zdarzenie> lista = FXCollections.observableArrayList();
         Kolekcja.stream().filter((items) -> (items.containsDate(d))).forEach((item) -> {
@@ -66,7 +66,7 @@ public class KalendarzModel {
         });
         return lista;
     }
-   public void toSql(sqlSerializer sql) throws ParseException
+   public void toSql(SQLSerializer sql) throws ParseException
    {
             HashSet<Zdarzenie> z = sql.selectZdarzenia();
 
@@ -76,7 +76,7 @@ public class KalendarzModel {
            sql.insertZdarzenie(item);
        }
    }
-    public void fromSql(sqlSerializer sql) throws ParseException
+    public void fromSql(SQLSerializer sql) throws ParseException
    {
             Kolekcja = sql.selectZdarzenia();
 

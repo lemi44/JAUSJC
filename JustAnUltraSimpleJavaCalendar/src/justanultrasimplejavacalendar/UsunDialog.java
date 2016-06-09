@@ -8,6 +8,8 @@ package justanultrasimplejavacalendar;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javafx.geometry.Insets;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -20,7 +22,7 @@ import javafx.scene.layout.GridPane;
  *
  * @author Xsior
  */
-public class UsunDialog extends Dialog<Date> {
+public class UsunDialog extends Dialog<Calendar> {
      public UsunDialog() {
         super();
         this.setTitle("Usuwanie zdarzenia");
@@ -38,9 +40,7 @@ public class UsunDialog extends Dialog<Date> {
         
         this.setResultConverter((ButtonType dialogButton) -> {
             if (dialogButton == potwierdzenieButtonType) {
-               
-                 
-                return Date.from(dtremove.getValue().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+                return GregorianCalendar.from(dtremove.getValue().plusDays(1).atStartOfDay(ZoneId.systemDefault()));
             }
             return null;
         });
