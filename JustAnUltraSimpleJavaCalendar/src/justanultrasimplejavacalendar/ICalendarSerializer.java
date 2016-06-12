@@ -19,12 +19,19 @@ import java.text.*;
  */
 public class ICalendarSerializer {
 
-    public static final String SERIALIZED_FILE_NAME = "kalendarz.ics";
+    private String SERIALIZED_FILE_NAME = "kalendarz.ics";
     public final static char CR  = (char) 0x0D;
     public final static char LF  = (char) 0x0A; 
     public final static String CRLF  = "" + CR + LF;
     private final DateFormat fmtDate = new SimpleDateFormat("yyyyMMdd");
     private final DateFormat fmtTime = new SimpleDateFormat("HHmmss");
+    public void setDir(String dir){
+        SERIALIZED_FILE_NAME = dir + "/" + SERIALIZED_FILE_NAME;
+    }
+    public void setName(String n)
+    {
+        SERIALIZED_FILE_NAME = n;
+    }
     public void saveKalendarz(KalendarzModel z) {
         
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(SERIALIZED_FILE_NAME))) {

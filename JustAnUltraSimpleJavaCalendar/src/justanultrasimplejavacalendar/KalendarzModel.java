@@ -14,14 +14,23 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Xsior
  */
-public class KalendarzModel {
-    @FXML Collection<Zdarzenie> Kolekcja;
+@XmlRootElement(namespace = "justanultrasimplejavacalendar")
 
+
+public class KalendarzModel {
+    @XmlElementWrapper(name = "KalendarzModel")
+    // XmlElement sets the name of the entities
+    @XmlElement(name = "Zdarzenie")
+    Collection<Zdarzenie> Kolekcja;
+    
     public Collection<Zdarzenie> getKolekcja() {
         return Kolekcja;
     }

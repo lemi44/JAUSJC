@@ -68,9 +68,9 @@ public class SQLSerializer {
     public boolean insertZdarzenie(Zdarzenie z) {
         try {
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            String strDtStamp = df.format(z.getDtstamp());
-            String strDtStart = df.format(z.getDtstart());
-            String strDtEnd = df.format(z.getDtend());
+            String strDtStamp = df.format(z.getDtstamp().getTime());
+            String strDtStart = df.format(z.getDtstart().getTime());
+            String strDtEnd = df.format(z.getDtend().getTime());
             PreparedStatement prepStmt = conn.prepareStatement(
                     "insert into zdarzenia values (? , ?, ?, ?, ?, ?);");
             prepStmt.setString(1, z.getUid() );

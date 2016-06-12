@@ -21,12 +21,16 @@ import java.util.HashSet;
 
 
 public class XMLSerializer {
-    private static final String SERIALIZED_FILE_NAME="kalendarz.xml";
+    private String SERIALIZED_FILE_NAME="kalendarz.xml";
     XMLEncoder encoder;
     XMLDecoder decoder;
     public XMLSerializer() {
         
 
+    }
+    public XMLSerializer(String dir)
+    {
+        SERIALIZED_FILE_NAME = dir + "/" + SERIALIZED_FILE_NAME;
     }
     public void saveKalendarz(KalendarzModel z){
         

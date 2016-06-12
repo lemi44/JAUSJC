@@ -5,6 +5,7 @@
  */
 package justanultrasimplejavacalendar;
 
+import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -30,12 +31,11 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.util.Pair;
 
 /**
  *
@@ -52,6 +52,9 @@ public class UIController implements Initializable {
     private StringProperty wybranaData = new SimpleStringProperty();
     private KalendarzModel model = new KalendarzModel();
     private SQLSerializer sql;
+    private boolean saveOnExit=false;
+    private String saveDir="";
+    
     public final String getWybranaData() {return wybranaData.get();}
     public final void setWybranaData(String value){wybranaData.set(value);}
     public StringProperty wybranaDataProperty() {return wybranaData;}
@@ -93,16 +96,28 @@ public class UIController implements Initializable {
     @FXML
     private void handleImportICalendarAction(ActionEvent event) {
         ICalendarSerializer cal = new ICalendarSerializer();
+        if(saveDir.length()>1&&saveDir!=null)
+            cal.setDir(saveDir);
+        
         model = cal.loadKalendarz();
         aktualizujDate();
         aktualizujKomorki();
+        cal = null;
     }
     
     @FXML
     private void handleImportXMLAction(ActionEvent event) {
-        XMLSerializer xml;
-        xml = new XMLSerializer();
+        /*XMLSerializer xml;
+        if(saveDir.length()>1)
+            xml = new XMLSerializer(saveDir);
+        else
+            xml = new XMLSerializer();
         model.fromXml(xml);
+        aktualizujDate();
+        aktualizujKomorki();
+        xml = null;*/
+        XMLSerialization2 xml = new XMLSerialization2();
+        model = xml.loadKalendarz();
         aktualizujDate();
         aktualizujKomorki();
     }
@@ -122,16 +137,25 @@ public class UIController implements Initializable {
     
     @FXML
     private void handleExportICalendarAction(ActionEvent event) {
+        
         ICalendarSerializer cal = new ICalendarSerializer();
+        if(saveDir.length()>1)
+            cal.setDir(saveDir);
         cal.saveKalendarz(model);
+
     }
     
     @FXML
     private void handleExportXMLAction(ActionEvent event) {
         XMLSerializer xml;
-        xml = new XMLSerializer();
+        if(saveDir.length()>1)
+            xml = new XMLSerializer(saveDir);
+        else
+            xml = new XMLSerializer();
         model.toXml(xml);
         xml.close();
+        XMLSerialization2 x = new XMLSerialization2();
+        x.saveKalendarz(model);
     }
     
     @FXML
@@ -151,6 +175,26 @@ public class UIController implements Initializable {
     
     @FXML
     private void handleUstawieniaAction(ActionEvent event) {
+        Dialog<Pair<Boolean,String>> dialog = new OptionsDialog(saveOnExit, saveDir);
+        Optional<Pair<Boolean,String>> result = dialog.showAndWait();
+        result.ifPresent(ev -> {
+            Pair<Boolean,String> p = ev;
+            saveOnExit = p.getKey();
+            saveDir = p.getValue();
+        });
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                OptionsSerializer o = new OptionsSerializer();
+                o.save(saveOnExit, saveDir);
+                if(saveOnExit == true)
+                {
+                    ICalendarSerializer cal = new ICalendarSerializer();
+                    cal.setName("autosave.ics");
+                    cal.saveKalendarz(model);
+                }
+            }
+        });
         
     }
     
@@ -206,11 +250,22 @@ public class UIController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         wyjscieMenuItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+Q"));
+        OptionsSerializer o = new OptionsSerializer();
+        Pair<Boolean,String> p = o.load();
+            saveOnExit = p.getKey();
+            saveDir = p.getValue();
         for (int i = 0; i < 7; i++) {
             Label l = new Label(dni[i]);
             l.setFont(Font.font("System", FontWeight.BOLD, 18));
             //l.setAlignment(Pos.CENTER);
             tabelaDni.add(l, i, 0);
+        }
+        File f = new File("autosave.ics");
+        if(saveOnExit==true&&f.exists() && !f.isDirectory()){
+            ICalendarSerializer cal = new ICalendarSerializer();
+            cal.setName("autosave.ics");
+            model = cal.loadKalendarz();
+            cal = null;
         }
         aktualizujDate();
         aktualizujKomorki();
