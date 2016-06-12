@@ -6,6 +6,7 @@
 package justanultrasimplejavacalendar;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -37,6 +38,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Pair;
+import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -128,19 +130,33 @@ public class UIController implements Initializable {
         XMLSerialization2 xml = new XMLSerialization2();
         if(saveDir.length()>1&&saveDir!=null)
             xml.setDir(saveDir);
+        try{
         model = xml.loadKalendarz();
+        } catch (JAXBException | FileNotFoundException ex) {
+            Alert exceptionAlert = new Alert(AlertType.ERROR);
+            exceptionAlert.setContentText("Błąd deserializacji danych: "+ex.getLocalizedMessage());
+            exceptionAlert.showAndWait();
+        }
         aktualizujDate();
         aktualizujKomorki();
     }
     
     @FXML
     private void handleImportDatabaseAction(ActionEvent event) {
-        sql.connect();
+        try {
+            sql.connect();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Alert exceptionAlert = new Alert(AlertType.ERROR);
+            exceptionAlert.setContentText("Błąd otwierania połączenia z bazą danych: "+ex.getLocalizedMessage());
+            exceptionAlert.showAndWait();
+        }
         
         try {
             model.fromSql(sql);
         } catch (ParseException ex) {
-            Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
+            Alert exceptionAlert = new Alert(AlertType.ERROR);
+            exceptionAlert.setContentText("Błąd deserializacji danych: "+ex.getLocalizedMessage());
+            exceptionAlert.showAndWait();
         }
         aktualizujDate();
         aktualizujKomorki();
@@ -174,7 +190,13 @@ public class UIController implements Initializable {
         XMLSerialization2 x = new XMLSerialization2();
         if(saveDir.length()>1&&saveDir!=null)
             x.setDir(saveDir);
-        x.saveKalendarz(model);
+        try {
+            x.saveKalendarz(model);
+        } catch (JAXBException ex) {
+            Alert exceptionAlert = new Alert(AlertType.ERROR);
+            exceptionAlert.setContentText("Błąd serializacji danych: "+ex.getLocalizedMessage());
+            exceptionAlert.showAndWait();
+        }
     }
     
     @FXML
@@ -189,7 +211,13 @@ public class UIController implements Initializable {
         } catch (ParseException ex) {
             Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        sql.closeConnection();
+        try {
+            sql.closeConnection();
+        } catch (SQLException ex) {
+            Alert exceptionAlert = new Alert(AlertType.ERROR);
+            exceptionAlert.setContentText("Błąd zamykania bazych danych: "+ex.getLocalizedMessage());
+            exceptionAlert.showAndWait();
+        }
     }
     
     @FXML
@@ -232,9 +260,10 @@ public class UIController implements Initializable {
     @FXML
     private void handleAboutAction(ActionEvent event) {
         Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText("Look, an Information Dialog");
-        alert.setContentText("I have a great message for you!");
+        alert.setTitle("O programie");
+        alert.setHeaderText("JAUS Java Calendar v1.0");
+        alert.setContentText("JustAnUntraSimple Java Calendar jest to program typu kalendarz/terminarz. "
+                + "\n Twórcy: Michał Leśniak oraz Jakub Florczyk \n Strona: http://lemi44.tk ");
         
         alert.showAndWait();
     }
@@ -301,7 +330,13 @@ public class UIController implements Initializable {
         }
         aktualizujDate();
         aktualizujKomorki();
-        sql = new SQLSerializer();
+        try {
+            sql = new SQLSerializer();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Alert exceptionAlert = new Alert(AlertType.ERROR);
+            exceptionAlert.setContentText("Błąd tworzenia połączenia z bazą danych: "+ex.getLocalizedMessage());
+            exceptionAlert.showAndWait();
+        }
     }     
 
     private void aktualizujKomorki() {

@@ -31,18 +31,19 @@ public class SQLSerializer {
     private Connection conn;
     private Statement stat;
     
-    public SQLSerializer() {
+    public SQLSerializer() throws SQLException, ClassNotFoundException {
         connect();
  
         createTables();
     }
-    public void connect()
+    public void connect() throws ClassNotFoundException, SQLException
     {
         try {
             Class.forName(SQLSerializer.DRIVER);
         } catch (ClassNotFoundException e) {
             System.err.println("Brak sterownika JDBC");
             e.printStackTrace();
+            throw e;
         }
  
         try {
@@ -51,6 +52,7 @@ public class SQLSerializer {
         } catch (SQLException e) {
             System.err.println("Problem z otwarciem polaczenia");
             e.printStackTrace();
+            throw e;
         } 
     }
     public boolean createTables()
@@ -87,7 +89,7 @@ public class SQLSerializer {
         }
         return true;
     }
-    public HashSet<Zdarzenie> selectZdarzenia() throws ParseException {
+    public HashSet<Zdarzenie> selectZdarzenia() throws ParseException, SQLException {
         HashSet<Zdarzenie> set = new HashSet<Zdarzenie>();
         try {
             ResultSet result = stat.executeQuery("SELECT * FROM zdarzenia");
@@ -111,16 +113,17 @@ public class SQLSerializer {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw e;
         }
         return set;
     }
-     public void closeConnection() {
+     public void closeConnection() throws SQLException {
         try {
             conn.close();
         } catch (SQLException e) {
             System.err.println("Problem z zamknieciem polaczenia");
             e.printStackTrace();
+            throw e;
         }
     }
     public void delZdarzenia() throws SQLException {

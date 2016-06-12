@@ -5,6 +5,7 @@
  */
 package justanultrasimplejavacalendar;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Calendar;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -77,7 +79,14 @@ public class KalendarzModel {
     }
    public void toSql(SQLSerializer sql) throws ParseException
    {
-            HashSet<Zdarzenie> z = sql.selectZdarzenia();
+            HashSet<Zdarzenie> z=null;
+        try {
+            z = sql.selectZdarzenia();
+        } catch (SQLException ex) {
+            Alert exceptionAlert = new Alert(Alert.AlertType.ERROR);
+            exceptionAlert.setContentText("Błąd serializacji danych: "+ex.getLocalizedMessage());
+            exceptionAlert.showAndWait();
+        }
 
        for(Zdarzenie item : Kolekcja)
        {
@@ -87,7 +96,13 @@ public class KalendarzModel {
    }
     public void fromSql(SQLSerializer sql) throws ParseException
    {
+        try {
             Kolekcja = sql.selectZdarzenia();
+        } catch (SQLException ex) {
+            Alert exceptionAlert = new Alert(Alert.AlertType.ERROR);
+            exceptionAlert.setContentText("Błąd deserializacji danych: "+ex.getLocalizedMessage());
+            exceptionAlert.showAndWait();
+        }
 
    }
     public void toXml(XMLSerializer xml){

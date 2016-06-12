@@ -33,15 +33,16 @@ public class XMLSerialization2 {
         }
    }
     
-    public void saveKalendarz(KalendarzModel k)
+    public void saveKalendarz(KalendarzModel k) throws JAXBException
     {
         try {
             m.marshal(k, new File(pathstring));
         } catch (JAXBException ex) {
             Logger.getLogger(XMLSerialization2.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         }
     }
-    public KalendarzModel loadKalendarz(){
+    public KalendarzModel loadKalendarz() throws FileNotFoundException, JAXBException{
         try {
             Unmarshaller um = context.createUnmarshaller();
             try {
@@ -49,13 +50,14 @@ public class XMLSerialization2 {
                 return model2;
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(XMLSerialization2.class.getName()).log(Level.SEVERE, null, ex);
+                throw ex;
             }
             
             
         } catch (JAXBException ex) {
             Logger.getLogger(XMLSerialization2.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         }
-        return null;
     }
     public void setDir(String s)
     {
