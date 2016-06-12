@@ -48,6 +48,7 @@ public class UIController implements Initializable {
     
     @FXML private MenuBar menuBar;
     @FXML private MenuItem wyjscieMenuItem;
+    @FXML private MenuItem dodajMenuItem;
     @FXML private GridPane tabelaDni;
     @FXML private Label data;
     @FXML private GridPane komorkiKalendarza;
@@ -194,7 +195,7 @@ public class UIController implements Initializable {
             x.saveKalendarz(model);
         } catch (JAXBException ex) {
             Alert exceptionAlert = new Alert(AlertType.ERROR);
-            exceptionAlert.setContentText("Błąd serializacji danych: "+ex.getLocalizedMessage());
+            exceptionAlert.setContentText("Błąd serializacji danych: "+ex.getLinkedException().getLocalizedMessage());
             exceptionAlert.showAndWait();
         }
     }
@@ -262,8 +263,8 @@ public class UIController implements Initializable {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("O programie");
         alert.setHeaderText("JAUS Java Calendar v1.0");
-        alert.setContentText("JustAnUntraSimple Java Calendar jest to program typu kalendarz/terminarz. "
-                + "\n Twórcy: Michał Leśniak oraz Jakub Florczyk \n Strona: http://lemi44.tk ");
+        alert.setContentText("JustAnUltraSimple Java Calendar jest to program typu kalendarz/terminarz. "
+                + "\nTwórcy: Michał Leśniak oraz Jakub Florczyk \nStrona: http://lemi44.tk ");
         
         alert.showAndWait();
     }
@@ -305,6 +306,7 @@ public class UIController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         wyjscieMenuItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+Q"));
+        dodajMenuItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+N"));
         OptionsSerializer o = new OptionsSerializer();
         Pair<Boolean,String> p = o.load();
             saveOnExit = p.getKey();

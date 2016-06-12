@@ -19,7 +19,7 @@
       <menus>
          <Menu text="_Kalendarz">
             <items>
-               <MenuItem onAction="#handleDodajAction" text="Dodaj _nowe zdarzenie" />
+               <MenuItem fx:id="dodajMenuItem" onAction="#handleDodajAction" text="Dodaj _nowe zdarzenie" />
                <MenuItem onAction="#handleUsunDialogAction" text="_Usuń wg kryterium" />
                <MenuItem onAction="#handleFiltrujDialogAction" text="_Filtruj zdarzenia" />
                <SeparatorMenuItem />
