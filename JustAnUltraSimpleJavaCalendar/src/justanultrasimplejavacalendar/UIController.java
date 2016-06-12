@@ -117,6 +117,8 @@ public class UIController implements Initializable {
         aktualizujKomorki();
         xml = null;*/
         XMLSerialization2 xml = new XMLSerialization2();
+        if(saveDir.length()>1&&saveDir!=null)
+            xml.setDir(saveDir);
         model = xml.loadKalendarz();
         aktualizujDate();
         aktualizujKomorki();
@@ -147,14 +149,16 @@ public class UIController implements Initializable {
     
     @FXML
     private void handleExportXMLAction(ActionEvent event) {
-        XMLSerializer xml;
+        /*XMLSerializer xml;
         if(saveDir.length()>1)
             xml = new XMLSerializer(saveDir);
         else
             xml = new XMLSerializer();
         model.toXml(xml);
-        xml.close();
+        xml.close();*/
         XMLSerialization2 x = new XMLSerialization2();
+        if(saveDir.length()>1&&saveDir!=null)
+            x.setDir(saveDir);
         x.saveKalendarz(model);
     }
     

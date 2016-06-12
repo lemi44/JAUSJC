@@ -20,8 +20,9 @@ import javax.xml.bind.Unmarshaller;
  * @author Xsior
  */
 public class XMLSerialization2 {
-    JAXBContext context;
-    Marshaller m;
+    private JAXBContext context;
+    private Marshaller m;
+    private String pathstring = "Kalendarz.xml";
     XMLSerialization2(){
         try {
             context = JAXBContext.newInstance(KalendarzModel.class);
@@ -31,10 +32,11 @@ public class XMLSerialization2 {
             Logger.getLogger(XMLSerialization2.class.getName()).log(Level.SEVERE, null, ex);
         }
    }
+    
     public void saveKalendarz(KalendarzModel k)
     {
         try {
-            m.marshal(k, new File("./Kalendarz2.xml"));
+            m.marshal(k, new File(pathstring));
         } catch (JAXBException ex) {
             Logger.getLogger(XMLSerialization2.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -43,7 +45,7 @@ public class XMLSerialization2 {
         try {
             Unmarshaller um = context.createUnmarshaller();
             try {
-                KalendarzModel model2 = (KalendarzModel) um.unmarshal(new FileReader("./Kalendarz2.xml"));
+                KalendarzModel model2 = (KalendarzModel) um.unmarshal(new FileReader(pathstring));
                 return model2;
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(XMLSerialization2.class.getName()).log(Level.SEVERE, null, ex);
@@ -54,5 +56,9 @@ public class XMLSerialization2 {
             Logger.getLogger(XMLSerialization2.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    public void setDir(String s)
+    {
+        pathstring = s + "/" + pathstring;
     }
 }
