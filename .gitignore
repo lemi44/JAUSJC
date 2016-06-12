@@ -13,3 +13,8 @@ hs_err_pid*
 /JustAnUltraSimpleJavaCalendar/nbproject/private/
 /JustAnUltraSimpleJavaCalendar/build/
 /JustAnUltraSimpleJavaCalendar/dist/
+
+# Pliki z danymi
+*.ics
+*.xml
+*.db

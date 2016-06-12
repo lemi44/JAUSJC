@@ -32,7 +32,7 @@ public class ICalendarSerializer {
     {
         SERIALIZED_FILE_NAME = n;
     }
-    public void saveKalendarz(KalendarzModel z) {
+    public void saveKalendarz(KalendarzModel z) throws FileNotFoundException, IOException  {
         
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(SERIALIZED_FILE_NAME))) {
             writer.write("BEGIN:VCALENDAR");
@@ -70,12 +70,14 @@ public class ICalendarSerializer {
             writer.write("END:VCALENDAR");
             writer.write(CRLF);
         } catch(FileNotFoundException fileNotFound) {
-            System.err.println("ERROR: While Creating or Opening the File kalendarz.ics");
+            Logger.getLogger(ICalendarSerializer.class.getName()).log(Level.SEVERE, null, fileNotFound);
+            throw fileNotFound;
         } catch (IOException ex) {
             Logger.getLogger(ICalendarSerializer.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         }
     }
-    public KalendarzModel loadKalendarz() {
+    public KalendarzModel loadKalendarz() throws FileNotFoundException, IOException, ParseException {
        
        try(BufferedReader reader = new BufferedReader(new FileReader(SERIALIZED_FILE_NAME))) {
            boolean loop = true;
@@ -168,15 +170,13 @@ public class ICalendarSerializer {
                }
            }
            return k;
-       } catch (FileNotFoundException e) {
-           System.err.println("ERROR: File kalendarz.ics not found");
-       } catch (IOException ex) {
+       } catch (FileNotFoundException ex) {
            Logger.getLogger(ICalendarSerializer.class.getName()).log(Level.SEVERE, null, ex);
-       } catch (ParseException ex) {
-            Logger.getLogger(ICalendarSerializer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       
-       return null;
+           throw ex;
+       } catch (IOException | ParseException ex) {
+           Logger.getLogger(ICalendarSerializer.class.getName()).log(Level.SEVERE, null, ex);
+           throw ex;
+       }
     }
     
 }

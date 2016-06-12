@@ -6,6 +6,7 @@
 package justanultrasimplejavacalendar;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -99,7 +100,15 @@ public class UIController implements Initializable {
         if(saveDir.length()>1&&saveDir!=null)
             cal.setDir(saveDir);
         
-        model = cal.loadKalendarz();
+        try {
+            model = cal.loadKalendarz();
+        } catch (IOException | ParseException ex) {
+            Alert exceptionAlert = new Alert(AlertType.ERROR);
+            exceptionAlert.setContentText("Błąd deserializacji danych: "+ex.getLocalizedMessage());
+            exceptionAlert.showAndWait();
+        }
+        if(model==null)
+            model = new KalendarzModel();
         aktualizujDate();
         aktualizujKomorki();
         cal = null;
@@ -143,7 +152,13 @@ public class UIController implements Initializable {
         ICalendarSerializer cal = new ICalendarSerializer();
         if(saveDir.length()>1)
             cal.setDir(saveDir);
-        cal.saveKalendarz(model);
+        try {
+            cal.saveKalendarz(model);
+        } catch (IOException ex) {
+            Alert exceptionAlert = new Alert(AlertType.ERROR);
+            exceptionAlert.setContentText("Błąd serializacji danych: "+ex.getLocalizedMessage());
+            exceptionAlert.showAndWait();
+        }
 
     }
     
@@ -195,7 +210,14 @@ public class UIController implements Initializable {
                 {
                     ICalendarSerializer cal = new ICalendarSerializer();
                     cal.setName("autosave.ics");
-                    cal.saveKalendarz(model);
+                    try {
+                        cal.saveKalendarz(model);
+                    } catch (IOException ex) {
+                        saveOnExit=false;
+                        Alert exceptionAlert = new Alert(AlertType.ERROR);
+                        exceptionAlert.setContentText("Błąd serializacji danych: "+ex.getLocalizedMessage());
+                        exceptionAlert.showAndWait();
+                    }
                 }
             }
         });
@@ -268,7 +290,13 @@ public class UIController implements Initializable {
         if(saveOnExit==true&&f.exists() && !f.isDirectory()){
             ICalendarSerializer cal = new ICalendarSerializer();
             cal.setName("autosave.ics");
-            model = cal.loadKalendarz();
+            try {
+                model = cal.loadKalendarz();
+            } catch (IOException | ParseException ex) {
+                Alert exceptionAlert = new Alert(AlertType.ERROR);
+                exceptionAlert.setContentText("Błąd deserializacji danych: "+ex.getLocalizedMessage());
+                exceptionAlert.showAndWait();
+            }
             cal = null;
         }
         aktualizujDate();
