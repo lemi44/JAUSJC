@@ -17,5 +17,6 @@ hs_err_pid*
 # Pliki z danymi
 *.ics
 *.xml
+!**/build.xml
 !**/nbproject/*.xml
 *.db
