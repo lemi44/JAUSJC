@@ -6,9 +6,11 @@
 package justanultrasimplejavacalendar;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.UUID;
+import javafx.util.Duration;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -30,6 +32,7 @@ public class Zdarzenie implements Serializable{
         this.uid = UUID.randomUUID();
         this.Summary = "Generic event";
         this.Description = " ";
+        this.isAlarm = false;
     }
     public Zdarzenie(Calendar dtstamp, Calendar dtstart, Calendar dtend, String uid, String Summary, String Description) {
         this.dtstamp = dtstamp;
@@ -38,6 +41,7 @@ public class Zdarzenie implements Serializable{
         this.uid = UUID.fromString(uid);
         this.Summary = Summary;
         this.Description = Description;
+        this.isAlarm = false;
     }
 
     public Zdarzenie(Calendar dtstart, Calendar dtend, String Summary, String Description) {
@@ -47,6 +51,7 @@ public class Zdarzenie implements Serializable{
         this.Description = Description;
         this.dtstamp = new GregorianCalendar();
         this.uid = UUID.randomUUID();
+        this.isAlarm = false;
     }
     @XmlElement(name = "dtstamp")
     public Calendar getDtstamp() {
@@ -61,17 +66,35 @@ public class Zdarzenie implements Serializable{
         return dtstart;
     }
     
+    public Date getDateStart() {
+        return dtstart.getTime();
+    }
+    
     public void setDtstart(Calendar dtstart) {
         this.dtstart = dtstart;
     }
+    
+    public void setDateStart(Date dtstart) {
+        this.dtstart.setTime(dtstart);
+    }
+    
     @XmlElement(name = "dtend")
     public Calendar getDtend() {
         return dtend;
+    }
+    
+    public Date getDateEnd() {
+        return dtend.getTime();
     }
 
     public void setDtend(Calendar dtend) {
         this.dtend = dtend;
     }
+    
+    public void setDateEnd(Date dtend) {
+        this.dtend.setTime(dtend);
+    }
+    
     @XmlElement(name = "uid")
     public String getUid() {
         return uid.toString();
@@ -96,6 +119,20 @@ public class Zdarzenie implements Serializable{
     public void setDescription(String Description) {
         this.Description = Description;
     }
+    
+    public Duration getAlarm() {
+        return alarm;
+    }
+    
+    public void setAlarm(Duration alarm) {
+        this.alarm = alarm;
+        isAlarm = true;
+    }
+    
+    public boolean getIsAlarm() {
+        return isAlarm;
+    }
+    
     public Boolean containsDate(Calendar d) {
         if(dtstart.before(d) && d.before(dtend))
         {
@@ -110,4 +147,6 @@ public class Zdarzenie implements Serializable{
     private UUID uid;
     private String Summary;
     private String Description;
+    private Duration alarm;
+    private boolean isAlarm;
 }

@@ -83,8 +83,7 @@ public class KomorkaController extends VBox {
             prawdziwaListaZdarzen.add(new Pair(temp,item));
             listaStringow.add(temp);
         });
-        // TODO: Zastąpić stringi klasą pochodną po ListCell, aby zastąpić ten
-        //  workaround z parami String,Zdarzenie
+        // TODO: Zastąpić stringi klasą pochodną po ListCell, aby zastąpić ten workaround z parami String,Zdarzenie
         listaZdarzen.setItems(listaStringow);
     }
     

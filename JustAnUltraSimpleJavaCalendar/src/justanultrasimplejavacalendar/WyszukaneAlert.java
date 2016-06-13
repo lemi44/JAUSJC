@@ -34,12 +34,12 @@ public class WyszukaneAlert extends Alert{
         wyniki.setEditable(false);
         TableColumn dtstart = new TableColumn("Data początkowa");
         dtstart.setCellValueFactory(
-        new PropertyValueFactory<Zdarzenie,String>("dtstart")
+        new PropertyValueFactory<Zdarzenie,String>("DateStart")
         );
 
         TableColumn dtend = new TableColumn("Data końcowa");
         dtend.setCellValueFactory(
-        new PropertyValueFactory<Zdarzenie,String>("dtend")
+        new PropertyValueFactory<Zdarzenie,String>("DateEnd")
         );
         TableColumn summary = new TableColumn("Nazwa zdarzenia");
         summary.setCellValueFactory(
