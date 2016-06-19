@@ -295,6 +295,7 @@ public class UIController implements Initializable {
                         exceptionAlert.showAndWait();
                     }
                 }
+        Alarm.getInstance().sprawdzIUstawModel(model);
     }
     
     @Override
@@ -335,6 +336,12 @@ public class UIController implements Initializable {
             exceptionAlert.setContentText("Błąd tworzenia połączenia z bazą danych: "+ex.getLocalizedMessage());
             exceptionAlert.showAndWait();
         }
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                aktualizujDate();
+            }
+           });
     }     
 
     private void aktualizujKomorki() {

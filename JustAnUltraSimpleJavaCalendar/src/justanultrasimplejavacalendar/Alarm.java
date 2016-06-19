@@ -5,8 +5,12 @@
  */
 package justanultrasimplejavacalendar;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -37,12 +41,20 @@ public class Alarm {
     }
     private void sprawdzIUstawZdarzenie(Zdarzenie zdarzenie) {
         if(zdarzenie.isAlarm()) {
-            if(!listaPrzypomnien.contains(zdarzenie.getAlarm())) {
+            if(!listaPrzypomnien.contains(zdarzenie.getAlarm())&&zdarzenie.getDateEnd().before(new Date())) {
                 listaPrzypomnien.add(zdarzenie.getAlarm());
+                if(zdarzenie.getDateEnd().after(new Date()))
+                {
+                    zdarzenie.getAlarm().setPowtorzenia(0);
+                }
                 Timer timer = new Timer();
-                PrzypomnienieTask task = new PrzypomnienieTask(zdarzenie.getAlarm());
+                PrzypomnienieTask task = new PrzypomnienieTask(zdarzenie.getAlarm(), zdarzenie);
                 // TODO: Ustaw poprawnie to
-                timer.scheduleAtFixedRate(task, 0, 0);
+                    Calendar d = new GregorianCalendar();
+                    d.setTime(zdarzenie.getDateStart());
+                    d.add(Calendar.MINUTE, -(zdarzenie.getAlarm().getTrigger()));
+                    timer.schedule(task, d.getTime(), zdarzenie.getAlarm().getCzasTrwania()*1000*60); 
+
             }
             
         }
@@ -50,14 +62,34 @@ public class Alarm {
     // TODO: Zrobić tego taska aby wyświetlał Alert
     private class PrzypomnienieTask extends TimerTask {
         private Przypomnienie przypomnienie;
-
+        private Zdarzenie zdarzenie;
         @Override
         public void run() {
             
+           if(przypomnienie.getPowtorzenia()>0&&zdarzenie.getDateEnd().before(new Date())){
+               Platform.runLater(() -> {
+               PrzypomnienieAlert t = new PrzypomnienieAlert(zdarzenie);
+               przypomnienie.setPowtorzenia(przypomnienie.getPowtorzenia()-1);
+               });
+           }else{
+        this.cancel();
+           }
+        }
+
+        @Override
+        public boolean cancel() {
+            return super.cancel(); //To change body of generated methods, choose Tools | Templates.
         }
         
-        public PrzypomnienieTask(Przypomnienie p) {
+        public PrzypomnienieTask(Przypomnienie p, Zdarzenie z) {
             przypomnienie = p;
+            zdarzenie = z;
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                cancel();
+            }
+           });
         }
         
     }
