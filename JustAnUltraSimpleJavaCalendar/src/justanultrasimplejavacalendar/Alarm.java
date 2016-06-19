@@ -17,7 +17,7 @@ public class Alarm {
         
     }
     public void sprawdzIUstawZdarzenie(Zdarzenie zdarzenie) {
-        if(zdarzenie.getIsAlarm()) {
+        if(zdarzenie.isAlarm()) {
             Timer timer = new Timer();
             PrzypomnienieTask task = new PrzypomnienieTask();
             timer.scheduleAtFixedRate(task, 0, 0);

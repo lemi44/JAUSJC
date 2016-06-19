@@ -57,7 +57,7 @@ public class SQLSerializer {
     }
     public boolean createTables()
     {
-        String createZdarzenia = "CREATE TABLE IF NOT EXISTS zdarzenia (uid VARCHAR(250) PRIMARY KEY , summary varchar(255), description varchar(255), dtstamp string, dtstart string, dtend string)";
+        String createZdarzenia = "CREATE TABLE IF NOT EXISTS zdarzenia (uid VARCHAR(250) PRIMARY KEY , summary varchar(255), description varchar(255), dtstamp string, dtstart string, dtend string, alarmOpis string, alarmTrigger int, alarmCzas int, alarmPowtorzenia int)";
          try {
             stat.execute(createZdarzenia);
         } catch (SQLException e) {
@@ -73,7 +73,9 @@ public class SQLSerializer {
             String strDtStamp = df.format(z.getDtstamp().getTime());
             String strDtStart = df.format(z.getDtstart().getTime());
             String strDtEnd = df.format(z.getDtend().getTime());
-            PreparedStatement prepStmt = conn.prepareStatement(
+            PreparedStatement prepStmt;
+            /*if(z.isAlarm()==false){
+            prepStmt = conn.prepareStatement(
                     "insert into zdarzenia values (? , ?, ?, ?, ?, ?);");
             prepStmt.setString(1, z.getUid() );
             prepStmt.setString(2, z.getSummary());
@@ -81,7 +83,31 @@ public class SQLSerializer {
             prepStmt.setString(4, strDtStamp );
             prepStmt.setString(5, strDtStart );
             prepStmt.setString(6, strDtEnd );
+            }
+            else{*/
+            prepStmt = conn.prepareStatement(
+                    "insert into zdarzenia values (? , ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+            prepStmt.setString(1, z.getUid() );
+            prepStmt.setString(2, z.getSummary());
+            prepStmt.setString(3, z.getDescription());
+            prepStmt.setString(4, strDtStamp );
+            prepStmt.setString(5, strDtStart );
+            prepStmt.setString(6, strDtEnd ); 
+            
+            if(z.isAlarm()==true){
+            
+            prepStmt.setInt(8, (int) z.getAlarm().getTrigger().toMinutes());
+            prepStmt.setInt(9, (int) z.getAlarm().getCzasTrwania().toMinutes()); 
+            prepStmt.setInt(10, (int) z.getAlarm().getPowtorzenia()); 
+            }else{
+            prepStmt.setString(7, null );
+            prepStmt.setString(8, null);
+            prepStmt.setString(9, null); 
+            prepStmt.setString(10, null); 
+            }
+                
             prepStmt.execute();
+            
         } catch (SQLException e) {
             System.err.println("Blad przy wstawianiu czytelnika");
             e.printStackTrace();
@@ -94,8 +120,8 @@ public class SQLSerializer {
         try {
             ResultSet result = stat.executeQuery("SELECT * FROM zdarzenia");
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            String uid, summary, description, dtstamp, dtstart, dtend ;
-            
+            String uid, summary, description, dtstamp, dtstart, dtend, alarmOpis ;
+            int trigger, czas, powtorzenia;
             while(result.next()) {
                 uid = result.getString("uid");
                 summary = result.getString("summary");
@@ -109,7 +135,17 @@ public class SQLSerializer {
                 dtStartCal.setTime(df.parse(dtstart));
                 Calendar dtEndCal = new GregorianCalendar();
                 dtEndCal.setTime(df.parse(dtend));
-                set.add(new Zdarzenie(dtStampCal,dtStartCal,dtEndCal,uid,summary,description));
+                Zdarzenie z = new Zdarzenie(dtStampCal,dtStartCal,dtEndCal,uid,summary,description);
+                if(result.getString("alarmOpis")!=null)
+                {
+                    alarmOpis = result.getString("alarmOpis");
+                    trigger = result.getInt("alarmTrigger");
+                    czas = result.getInt("alarmCzas");
+                    powtorzenia = result.getInt("alarmPowtorzenia");
+                    
+                    Przypomnienie a = new Przypomnienie(alarmOpis, powtorzenia, z, trigger, czas);
+                }
+                set.add(z);
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -13,6 +13,7 @@ import java.util.UUID;
 import javafx.util.Duration;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -21,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Xsior
  */
 @XmlRootElement(name = "Zdarzenie")
-@XmlType(propOrder = { "dtstamp", "dtstart", "dtend", "uid", "summary", "description" })
+@XmlType(propOrder = { "dtstamp", "dtstart", "dtend", "uid", "summary", "description", "alarm" })
 
 public class Zdarzenie implements Serializable{
     private Calendar dtstamp;
@@ -32,7 +33,7 @@ public class Zdarzenie implements Serializable{
         this.uid = UUID.randomUUID();
         this.Summary = "Generic event";
         this.Description = " ";
-        this.isAlarm = false;
+        alarm = null;
     }
     public Zdarzenie(Calendar dtstamp, Calendar dtstart, Calendar dtend, String uid, String Summary, String Description) {
         this.dtstamp = dtstamp;
@@ -41,7 +42,7 @@ public class Zdarzenie implements Serializable{
         this.uid = UUID.fromString(uid);
         this.Summary = Summary;
         this.Description = Description;
-        this.isAlarm = false;
+        alarm = null;
     }
 
     public Zdarzenie(Calendar dtstart, Calendar dtend, String Summary, String Description) {
@@ -51,7 +52,7 @@ public class Zdarzenie implements Serializable{
         this.Description = Description;
         this.dtstamp = new GregorianCalendar();
         this.uid = UUID.randomUUID();
-        this.isAlarm = false;
+        alarm = null;
     }
     @XmlElement(name = "dtstamp")
     public Calendar getDtstamp() {
@@ -65,7 +66,7 @@ public class Zdarzenie implements Serializable{
     public Calendar getDtstart() {
         return dtstart;
     }
-    
+    @XmlTransient
     public Date getDateStart() {
         return dtstart.getTime();
     }
@@ -82,7 +83,7 @@ public class Zdarzenie implements Serializable{
     public Calendar getDtend() {
         return dtend;
     }
-    
+    @XmlTransient
     public Date getDateEnd() {
         return dtend.getTime();
     }
@@ -119,18 +120,22 @@ public class Zdarzenie implements Serializable{
     public void setDescription(String Description) {
         this.Description = Description;
     }
-    
-    public Duration getAlarm() {
+   @XmlElement(name = "alarm")
+    public Przypomnienie getAlarm() {
         return alarm;
     }
     
-    public void setAlarm(Duration alarm) {
+    public void setAlarm(Przypomnienie alarm) {
         this.alarm = alarm;
-        isAlarm = true;
     }
     
-    public boolean getIsAlarm() {
-        return isAlarm;
+    public boolean isAlarm() {
+        if(alarm==null)
+            return false;
+        else if(alarm instanceof Przypomnienie)
+            return true;
+        else
+            return false;
     }
     
     public Boolean containsDate(Calendar d) {
@@ -147,6 +152,7 @@ public class Zdarzenie implements Serializable{
     private UUID uid;
     private String Summary;
     private String Description;
-    private Duration alarm;
-    private boolean isAlarm;
+    /*private Duration alarm;
+    private boolean isAlarm;*/
+    private Przypomnienie alarm;
 }
