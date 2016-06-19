@@ -96,8 +96,8 @@ public class SQLSerializer {
             
             if(z.isAlarm()==true){
             
-            prepStmt.setInt(8, (int) z.getAlarm().getTrigger().toMinutes());
-            prepStmt.setInt(9, (int) z.getAlarm().getCzasTrwania().toMinutes()); 
+            prepStmt.setInt(8, (int) z.getAlarm().getTrigger());
+            prepStmt.setInt(9, (int) z.getAlarm().getCzasTrwania()); 
             prepStmt.setInt(10, (int) z.getAlarm().getPowtorzenia()); 
             }else{
             prepStmt.setString(7, null );

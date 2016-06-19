@@ -20,23 +20,23 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder = { "opis", "trigger", "czasTrwania", "powtorzenia"})
 public class Przypomnienie {
     private String opis;
-    private Duration trigger = Duration.ZERO;
-    private Duration czasTrwania = Duration.ZERO;
+    private int trigger;
+    private int czasTrwania;
     private Zdarzenie zdarzenie;
     
     public Przypomnienie(String opis, int powtorzenia, Zdarzenie zdarzenie, int trigger, int czas) {
         this.opis = opis;
         this.powtorzenia = powtorzenia;
         this.zdarzenie = zdarzenie;
-        this.trigger.add(Duration.minutes(trigger));
-        this.czasTrwania.add(Duration.minutes(czas));
+        this.trigger = trigger;
+        this.czasTrwania = czas;
     }
     private int powtorzenia;
 
     public Przypomnienie() {
         opis = "";
-        trigger.add(Duration.minutes(30));
-        czasTrwania.add(Duration.minutes(15));
+        trigger = 30;
+        czasTrwania = 15;
         powtorzenia=5;
     }
     @XmlElement(name = "opis")
@@ -48,19 +48,19 @@ public class Przypomnienie {
         this.opis = opis;
     }
     @XmlElement(name = "trigger")
-    public Duration getTrigger() {
+    public int getTrigger() {
         return trigger;
     }
 
-    public void setTrigger(Duration trigger) {
+    public void setTrigger(int trigger) {
         this.trigger = trigger;
     }
     @XmlElement(name = "czastrwania")
-    public Duration getCzasTrwania() {
+    public int getCzasTrwania() {
         return czasTrwania;
     }
 
-    public void setCzasTrwania(Duration czasTrwania) {
+    public void setCzasTrwania(int czasTrwania) {
         this.czasTrwania = czasTrwania;
     }
     @XmlElement(name = "powtorzenia")

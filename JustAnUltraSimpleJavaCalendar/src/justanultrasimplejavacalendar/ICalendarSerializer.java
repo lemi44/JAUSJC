@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.*;
+import javafx.util.Duration;
 
 /**
  *
@@ -64,6 +65,28 @@ public class ICalendarSerializer {
                     writer.write(event.getDescription());
                     writer.write(CRLF);
                 }   
+                if(event.isAlarm()==true) {
+                    writer.write("BEGIN:VALARM");
+                    writer.write(CRLF);
+                    writer.write("ACTION:DISPLAY");
+                    writer.write(CRLF);
+                    writer.write("DESCRIPTION:");
+                    writer.write(event.getAlarm().getOpis());
+                    writer.write(CRLF);
+                    writer.write("TRIGGER:-PT");
+                    writer.write(String.valueOf(event.getAlarm().getTrigger()));
+                    writer.write("M");
+                    writer.write(CRLF);
+                    writer.write("REPEAT:");
+                    writer.write(String.valueOf(event.getAlarm().getPowtorzenia()));
+                    writer.write(CRLF);
+                    writer.write("DURATION:PT");
+                    writer.write(String.valueOf(event.getAlarm().getCzasTrwania()));
+                    writer.write("M");
+                    writer.write(CRLF);
+                    writer.write("END:VALARM");
+                    writer.write(CRLF);
+                }   
                 writer.write("END:VEVENT");
                 writer.write(CRLF);
             }
@@ -83,8 +106,10 @@ public class ICalendarSerializer {
            boolean loop = true;
            KalendarzModel k = null;
            Zdarzenie ev = null;
+           Przypomnienie a = null;
            while(loop) {
                String buffer = reader.readLine();
+               boolean x = false;
                String[] propertyValuePair = buffer.split(":");
                switch(propertyValuePair[0])
                {
@@ -97,6 +122,10 @@ public class ICalendarSerializer {
                            case "VEVENT":
                                ev = new Zdarzenie();
                                break;
+                           case "VALARM":
+                               a = new Przypomnienie();
+                               x=true;
+                               break;
                        }                       
                        break;
                    case "END":                       
@@ -107,6 +136,10 @@ public class ICalendarSerializer {
                                break;
                            case "VEVENT":
                                k.add(ev);
+                               break;
+                           case "VALARM":
+                               ev.setAlarm(a);
+                               x=false;
                                break;
                        }
                        break;
@@ -163,10 +196,26 @@ public class ICalendarSerializer {
                        break;
                    case "SUMMARY":
                        ev.setSummary(propertyValuePair[1]);
+
                        break;
                    case "DESCRIPTION":
+                       if(x==true){
+                            a.setOpis(propertyValuePair[1]);
+                       }else
                        ev.setDescription(propertyValuePair[1]);
+
                        break;
+                   case "TRIGGER":
+                       propertyValuePair[1] = propertyValuePair[1].replaceAll("\\D+","");
+                       a.setTrigger(Integer.parseInt(propertyValuePair[1]));
+                       break;
+                   case "REPEAT":
+                       a.setPowtorzenia(Integer.parseInt(propertyValuePair[1]));
+                       break;
+                   case "DURATION":
+                       propertyValuePair[1] = propertyValuePair[1].replaceAll("\\D+","");
+                       a.setCzasTrwania(Integer.parseInt(propertyValuePair[1]));
+                       break; 
                }
            }
            return k;

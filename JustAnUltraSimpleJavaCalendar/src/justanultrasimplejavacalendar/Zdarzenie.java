@@ -120,6 +120,7 @@ public class Zdarzenie implements Serializable{
     public void setDescription(String Description) {
         this.Description = Description;
     }
+    
    @XmlElement(name = "alarm")
     public Przypomnienie getAlarm() {
         return alarm;
@@ -139,12 +140,32 @@ public class Zdarzenie implements Serializable{
     }
     
     public Boolean containsDate(Calendar d) {
-        if(dtstart.before(d) && d.before(dtend))
-        {
-            return true; 
-        }
-        else
-            return false;
+        Calendar tempS = new GregorianCalendar();
+        Calendar tempE = new GregorianCalendar();
+        Calendar tempD = new GregorianCalendar();
+        tempS.set(GregorianCalendar.YEAR, dtstart.get(GregorianCalendar.YEAR));
+        tempS.set(GregorianCalendar.MONTH, dtstart.get(GregorianCalendar.MONTH));
+        tempS.set(GregorianCalendar.DATE, dtstart.get(GregorianCalendar.DATE));
+        tempS.set(GregorianCalendar.HOUR_OF_DAY, 0);
+        tempS.set(GregorianCalendar.MINUTE, 0);
+        tempS.set(GregorianCalendar.SECOND, 0);
+        tempS.set(GregorianCalendar.MILLISECOND,0);
+        tempS.add(Calendar.DATE, -1);
+        tempE.set(GregorianCalendar.YEAR, dtend.get(GregorianCalendar.YEAR));
+        tempE.set(GregorianCalendar.MONTH, dtend.get(GregorianCalendar.MONTH));
+        tempE.set(GregorianCalendar.DATE, dtend.get(GregorianCalendar.DATE));
+        tempE.set(GregorianCalendar.HOUR_OF_DAY, 0);
+        tempE.set(GregorianCalendar.MINUTE, 0);
+        tempE.set(GregorianCalendar.SECOND, 0);
+        tempE.set(GregorianCalendar.MILLISECOND,0);
+        tempD.set(GregorianCalendar.YEAR, d.get(GregorianCalendar.YEAR));
+        tempD.set(GregorianCalendar.MONTH, d.get(GregorianCalendar.MONTH));
+        tempD.set(GregorianCalendar.DATE, d.get(GregorianCalendar.DATE));
+        tempD.set(GregorianCalendar.HOUR_OF_DAY, 0);
+        tempD.set(GregorianCalendar.MINUTE, 0);
+        tempD.set(GregorianCalendar.SECOND, 0);
+        tempD.set(GregorianCalendar.MILLISECOND,0);
+        return tempS.before(tempD) && !(tempD.after(tempE));
     }
     
     private Calendar dtstart;
@@ -154,5 +175,6 @@ public class Zdarzenie implements Serializable{
     private String Description;
     /*private Duration alarm;
     private boolean isAlarm;*/
+    @XmlElement(name = "alarm")
     private Przypomnienie alarm;
 }

@@ -330,6 +330,8 @@ public class UIController implements Initializable {
             }
             cal = null;
         }
+        Zdarzenie z = new Zdarzenie();
+
         aktualizujDate();
         aktualizujKomorki();
         try {
