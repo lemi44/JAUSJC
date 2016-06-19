@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Xsior
  */
 @XmlRootElement(name = "Przypomnienie")
-@XmlType(propOrder = { "opis", "trigger", "czasTrwania", "powtorzenia"})
+@XmlType(propOrder = { "opis", "trigger", "czasTrwania", "powtorzenia", "zdarzenie"})
 public class Przypomnienie {
     private String opis;
     private int trigger;
@@ -71,7 +71,7 @@ public class Przypomnienie {
     public void setPowtorzenia(int powtorzenia) {
         this.powtorzenia = powtorzenia;
     }
-    @XmlTransient
+    @XmlElement(name = "zdarzenie")
     public Zdarzenie getZdarzenie() {
         return zdarzenie;
     }
