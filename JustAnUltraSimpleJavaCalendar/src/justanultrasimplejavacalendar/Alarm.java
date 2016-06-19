@@ -7,32 +7,57 @@ package justanultrasimplejavacalendar;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
  * @author lemi44
  */
 public class Alarm {
-    public static void sprawdzIUstawModel(KalendarzModel model) {
-        
+    private ObservableList<Przypomnienie> listaPrzypomnien;
+    private static Alarm instance;
+    private Alarm() {
+        listaPrzypomnien = FXCollections.observableArrayList();
     }
-    public void sprawdzIUstawZdarzenie(Zdarzenie zdarzenie) {
+    
+    public static Alarm getInstance() {
+        if(instance==null)
+            instance=new Alarm();
+        return instance;
+    }
+    
+    public void sprawdzIUstawModel(KalendarzModel model) {
+        ObservableList<Zdarzenie> lista = FXCollections.observableArrayList();
+        for(Zdarzenie zd : model.getKolekcja())
+                lista.add(zd);
+        for(Zdarzenie zd : lista) {
+            sprawdzIUstawZdarzenie(zd);
+        } 
+    }
+    private void sprawdzIUstawZdarzenie(Zdarzenie zdarzenie) {
         if(zdarzenie.isAlarm()) {
-            Timer timer = new Timer();
-            PrzypomnienieTask task = new PrzypomnienieTask();
-            timer.scheduleAtFixedRate(task, 0, 0);
+            if(!listaPrzypomnien.contains(zdarzenie.getAlarm())) {
+                listaPrzypomnien.add(zdarzenie.getAlarm());
+                Timer timer = new Timer();
+                PrzypomnienieTask task = new PrzypomnienieTask(zdarzenie.getAlarm());
+                // TODO: Ustaw poprawnie to
+                timer.scheduleAtFixedRate(task, 0, 0);
+            }
+            
         }
     }
-    // TODO: Zrobić tego taska
+    // TODO: Zrobić tego taska aby wyświetlał Alert
     private class PrzypomnienieTask extends TimerTask {
+        private Przypomnienie przypomnienie;
 
         @Override
         public void run() {
             
         }
         
-        public PrzypomnienieTask() {
-            
+        public PrzypomnienieTask(Przypomnienie p) {
+            przypomnienie = p;
         }
         
     }
