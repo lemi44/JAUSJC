@@ -230,26 +230,7 @@ public class UIController implements Initializable {
             saveOnExit = p.getKey();
             saveDir = p.getValue();
         });
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                OptionsSerializer o = new OptionsSerializer();
-                o.save(saveOnExit, saveDir);
-                if(saveOnExit == true)
-                {
-                    ICalendarSerializer cal = new ICalendarSerializer();
-                    cal.setName("autosave.ics");
-                    try {
-                        cal.saveKalendarz(model);
-                    } catch (IOException ex) {
-                        saveOnExit=false;
-                        Alert exceptionAlert = new Alert(AlertType.ERROR);
-                        exceptionAlert.setContentText("Błąd serializacji danych: "+ex.getLocalizedMessage());
-                        exceptionAlert.showAndWait();
-                    }
-                }
-            }
-        });
+
         
     }
     
@@ -301,6 +282,19 @@ public class UIController implements Initializable {
         DateFormat fmt = new SimpleDateFormat("MMMM yyyy");
         Date tmpData = wybranyKalendarz.getTime();
         setWybranaData(fmt.format(tmpData));
+        if(saveOnExit == true)
+                {
+                    ICalendarSerializer cal = new ICalendarSerializer();
+                    cal.setName("autosave.ics");
+                    try {
+                        cal.saveKalendarz(model);
+                    } catch (IOException ex) {
+                        saveOnExit=false;
+                        Alert exceptionAlert = new Alert(AlertType.ERROR);
+                        exceptionAlert.setContentText("Błąd serializacji danych: "+ex.getLocalizedMessage());
+                        exceptionAlert.showAndWait();
+                    }
+                }
     }
     
     @Override

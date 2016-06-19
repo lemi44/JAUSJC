@@ -121,7 +121,7 @@ public class Zdarzenie implements Serializable{
         this.Description = Description;
     }
     
-   
+   @XmlElement(name = "alarm")
     public Przypomnienie getAlarm() {
         return alarm;
     }

@@ -57,7 +57,7 @@ public class SQLSerializer {
     }
     public boolean createTables()
     {
-        String createZdarzenia = "CREATE TABLE IF NOT EXISTS zdarzenia (uid VARCHAR(250) PRIMARY KEY , summary varchar(255), description varchar(255), dtstamp string, dtstart string, dtend string, alarmOpis string, alarmTrigger int, alarmCzas int, alarmPowtorzenia int)";
+        String createZdarzenia = "CREATE TABLE IF NOT EXISTS zdarzenia (uid VARCHAR(250) PRIMARY KEY , summary varchar(255), description varchar(255), dtstamp string, dtstart string, dtend string, alarmOpis varchar(255), alarmTrigger int, alarmCzas int, alarmPowtorzenia int)";
          try {
             stat.execute(createZdarzenia);
         } catch (SQLException e) {
@@ -144,6 +144,7 @@ public class SQLSerializer {
                     powtorzenia = result.getInt("alarmPowtorzenia");
                     
                     Przypomnienie a = new Przypomnienie(alarmOpis, powtorzenia, z, trigger, czas);
+                    z.setAlarm(a);
                 }
                 set.add(z);
             }

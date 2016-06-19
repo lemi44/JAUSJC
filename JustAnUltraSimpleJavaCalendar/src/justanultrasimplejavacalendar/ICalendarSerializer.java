@@ -71,7 +71,7 @@ public class ICalendarSerializer {
                     writer.write("ACTION:DISPLAY");
                     writer.write(CRLF);
                     writer.write("DESCRIPTION:");
-                    writer.write(event.getAlarm().getOpis());
+                    writer.write(event.getSummary());
                     writer.write(CRLF);
                     writer.write("TRIGGER:-PT");
                     writer.write(String.valueOf(event.getAlarm().getTrigger()));
@@ -83,6 +83,9 @@ public class ICalendarSerializer {
                     writer.write("DURATION:PT");
                     writer.write(String.valueOf(event.getAlarm().getCzasTrwania()));
                     writer.write("M");
+                    writer.write(CRLF);
+                    writer.write("UID:");
+                    writer.write(event.getUid());
                     writer.write(CRLF);
                     writer.write("END:VALARM");
                     writer.write(CRLF);
@@ -144,7 +147,11 @@ public class ICalendarSerializer {
                        }
                        break;
                    case "UID":
+                       if(x==true){
+                           a.setOpis(propertyValuePair[1]);
+                       }else
                        ev.setUid(propertyValuePair[1]);
+                       
                        break;
                    case "DTSTAMP":
                    {

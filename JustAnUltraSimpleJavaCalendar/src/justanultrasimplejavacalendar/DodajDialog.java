@@ -204,7 +204,7 @@ public class DodajDialog extends Dialog<Zdarzenie>{
         grid.add(TimeEndM,4,7);
         grid.add(endh, 0, 7);
         grid.add(endm,1,7);
-        grid.add(new Label("CZy ma być przypomnienie:"), 0, 8);
+        grid.add(new Label("Czy ma być przypomnienie:"), 0, 8);
         grid.add(alarm,1,8);
         grid.add(new Label("O ile wcześnij przypomnieć:"), 0, 9);
         grid.add(czas,1,9);
@@ -239,7 +239,7 @@ public class DodajDialog extends Dialog<Zdarzenie>{
                 c2.set(Calendar.MINUTE, (int) endm.getValue());
                 Zdarzenie z = new Zdarzenie(c1,c2,summary.getText(), descript.getText()  );
                 if(alarm.isSelected()){
-                Przypomnienie a = new Przypomnienie(descript.getText(),Integer.parseInt(powt.getText()),z,Integer.parseInt(czas.getText()),Integer.parseInt(trwanie.getText()) );
+                Przypomnienie a = new Przypomnienie(summary.getText(),Integer.parseInt(powt.getText()),z,Integer.parseInt(czas.getText()),Integer.parseInt(trwanie.getText()) );
                 z.setAlarm(a);
                 }
 

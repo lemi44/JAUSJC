@@ -17,12 +17,22 @@ import javax.xml.bind.annotation.XmlType;
  * @author Xsior
  */
 @XmlRootElement(name = "Przypomnienie")
-@XmlType(propOrder = { "opis", "trigger", "czasTrwania", "powtorzenia", "zdarzenie"})
+@XmlType(propOrder = { "opis", "trigger", "czasTrwania", "powtorzenia", "uid"})
 public class Przypomnienie {
     private String opis;
     private int trigger;
     private int czasTrwania;
     private Zdarzenie zdarzenie;
+    private String uid;
+
+    @XmlElement(name = "uid")
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
     
     public Przypomnienie(String opis, int powtorzenia, Zdarzenie zdarzenie, int trigger, int czas) {
         this.opis = opis;
@@ -30,6 +40,7 @@ public class Przypomnienie {
         this.zdarzenie = zdarzenie;
         this.trigger = trigger;
         this.czasTrwania = czas;
+        this.uid = zdarzenie.getUid();
     }
     private int powtorzenia;
 
@@ -71,7 +82,7 @@ public class Przypomnienie {
     public void setPowtorzenia(int powtorzenia) {
         this.powtorzenia = powtorzenia;
     }
-    @XmlElement(name = "zdarzenie")
+    @XmlTransient
     public Zdarzenie getZdarzenie() {
         return zdarzenie;
     }
@@ -79,8 +90,6 @@ public class Przypomnienie {
     public void setZdarzenie(Zdarzenie zdarzenie) {
         this.zdarzenie = zdarzenie;
     }
-    public String getIDZdarzenie() {
-        return this.zdarzenie.getUid();
-    }
+
     
 }
