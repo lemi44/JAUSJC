@@ -216,7 +216,19 @@ public class DodajDialog extends Dialog<Zdarzenie>{
         potwierdzenieButton.setDisable(true);
 
         summary.textProperty().addListener((observable, oldValue, newValue) -> {
-        potwierdzenieButton.setDisable(newValue.trim().isEmpty()); 
+            potwierdzenieButton.setDisable(newValue.trim().isEmpty()); 
+        });
+        powt.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(alarm.isSelected())
+                potwierdzenieButton.setDisable(!isValidPowtorzenie(newValue)||!isValidCzas(czas.getText())||!isValidTrwanie(trwanie.getText(),newValue));
+        });
+        czas.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(alarm.isSelected())
+                potwierdzenieButton.setDisable(!isValidPowtorzenie(powt.getText())||!isValidCzas(newValue)||!isValidTrwanie(trwanie.getText(),powt.getText()));
+        });
+        trwanie.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(alarm.isSelected())
+                potwierdzenieButton.setDisable(!isValidPowtorzenie(powt.getText())||!isValidCzas(czas.getText())||!isValidTrwanie(newValue,powt.getText()));
         });
         
         this.getDialogPane().setContent(grid);
@@ -239,8 +251,23 @@ public class DodajDialog extends Dialog<Zdarzenie>{
                 c2.set(Calendar.MINUTE, (int) endm.getValue());
                 Zdarzenie z = new Zdarzenie(c1,c2,summary.getText(), descript.getText()  );
                 if(alarm.isSelected()){
-                Przypomnienie a = new Przypomnienie(summary.getText(),Integer.parseInt(powt.getText()),z,Integer.parseInt(czas.getText()),Integer.parseInt(trwanie.getText()) );
-                z.setAlarm(a);
+                    Integer duration,repeat;
+                    try {
+                        duration = Integer.parseInt(trwanie.getText());
+                    }
+                    catch(NumberFormatException ex) {
+                        duration = null;
+                    }
+                    try {
+                        repeat = Integer.parseInt(powt.getText());
+                    }
+                    catch(NumberFormatException ex) {
+                        repeat = null;
+                    }
+                    
+                    
+                    Przypomnienie a = new Przypomnienie(summary.getText(),repeat,z,Integer.parseInt(czas.getText()), duration);
+                    z.setAlarm(a);
                 }
 
                 /*ZonedDateTime d = dtstart.getValue().atStartOfDay(ZoneId.systemDefault()).plusHours((long) starth.getValue());
@@ -256,6 +283,47 @@ public class DodajDialog extends Dialog<Zdarzenie>{
 
 
         
+    }
+
+    private boolean isValidPowtorzenie(String powt) {
+        try {
+            int test = Integer.parseInt(powt);
+            if(test<0)
+                return false;
+        }
+        catch(NumberFormatException ex) {
+            return true;
+        }
+        return true;
+    }
+
+    private boolean isValidCzas(String czas) {
+        try {
+            int test = Integer.parseInt(czas);
+            if(test<0)
+                return false;
+        }
+        catch(NumberFormatException ex) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidTrwanie(String trwanie, String powtorzenie) {
+        try {
+            int test2 = Integer.parseInt(powtorzenie);
+            if(test2==0)
+                return true;
+            else if(test2>0) {
+                int test = Integer.parseInt(trwanie);
+                if(test<=0)
+                    return false;
+            }
+        }
+        catch(NumberFormatException ex) {
+            return false;
+        }
+        return true;
     }
     
    

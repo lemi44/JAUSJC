@@ -146,14 +146,11 @@ public class UIController implements Initializable {
     private void handleImportDatabaseAction(ActionEvent event) {
         try {
             sql.connect();
+            model.fromSql(sql);
         } catch (ClassNotFoundException | SQLException ex) {
             Alert exceptionAlert = new Alert(AlertType.ERROR);
             exceptionAlert.setContentText("Błąd otwierania połączenia z bazą danych: "+ex.getLocalizedMessage());
             exceptionAlert.showAndWait();
-        }
-        
-        try {
-            model.fromSql(sql);
         } catch (ParseException ex) {
             Alert exceptionAlert = new Alert(AlertType.ERROR);
             exceptionAlert.setContentText("Błąd deserializacji danych: "+ex.getLocalizedMessage());
@@ -203,20 +200,19 @@ public class UIController implements Initializable {
     @FXML
     private void handleExportDatabaseAction(ActionEvent event) {
         try {
+            sql.connect();
             sql.delZdarzenia();
-        } catch (SQLException ex) {
-            Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
             model.toSql(sql);
+            sql.closeConnection();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
+            Alert exceptionAlert = new Alert(AlertType.ERROR);
+            exceptionAlert.setContentText("Błąd bazy danych: "+ex.getLocalizedMessage());
+            exceptionAlert.showAndWait();
         } catch (ParseException ex) {
             Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            sql.closeConnection();
-        } catch (SQLException ex) {
             Alert exceptionAlert = new Alert(AlertType.ERROR);
-            exceptionAlert.setContentText("Błąd zamykania bazych danych: "+ex.getLocalizedMessage());
+            exceptionAlert.setContentText("Błąd zapisu: "+ex.getLocalizedMessage());
             exceptionAlert.showAndWait();
         }
     }
@@ -282,19 +278,28 @@ public class UIController implements Initializable {
         DateFormat fmt = new SimpleDateFormat("MMMM yyyy");
         Date tmpData = wybranyKalendarz.getTime();
         setWybranaData(fmt.format(tmpData));
-        if(saveOnExit == true)
-                {
-                    ICalendarSerializer cal = new ICalendarSerializer();
-                    cal.setName("autosave.ics");
-                    try {
-                        cal.saveKalendarz(model);
-                    } catch (IOException ex) {
-                        saveOnExit=false;
-                        Alert exceptionAlert = new Alert(AlertType.ERROR);
-                        exceptionAlert.setContentText("Błąd serializacji danych: "+ex.getLocalizedMessage());
-                        exceptionAlert.showAndWait();
-                    }
-                }
+        if(saveOnExit == true) {
+            try {
+                sql.connect();
+                sql.delZdarzenia();
+                model.toSql(sql);
+                sql.closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
+                Alert exceptionAlert = new Alert(AlertType.ERROR);
+                exceptionAlert.setContentText("Błąd bazy danych: "+ex.getLocalizedMessage());
+                exceptionAlert.showAndWait();
+            } catch (ParseException ex) {
+                Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
+                Alert exceptionAlert = new Alert(AlertType.ERROR);
+                exceptionAlert.setContentText("Błąd zapisu: "+ex.getLocalizedMessage());
+                exceptionAlert.showAndWait();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(UIController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        OptionsSerializer o = new OptionsSerializer();
+        o.save(saveOnExit, saveDir);
         Alarm.getInstance().sprawdzIUstawModel(model);
     }
     
@@ -312,23 +317,6 @@ public class UIController implements Initializable {
             //l.setAlignment(Pos.CENTER);
             tabelaDni.add(l, i, 0);
         }
-        File f = new File("autosave.ics");
-        if(saveOnExit==true&&f.exists() && !f.isDirectory()){
-            ICalendarSerializer cal = new ICalendarSerializer();
-            cal.setName("autosave.ics");
-            try {
-                model = cal.loadKalendarz();
-            } catch (IOException | ParseException ex) {
-                Alert exceptionAlert = new Alert(AlertType.ERROR);
-                exceptionAlert.setContentText("Błąd deserializacji danych: "+ex.getLocalizedMessage());
-                exceptionAlert.showAndWait();
-            }
-            cal = null;
-        }
-        Zdarzenie z = new Zdarzenie();
-
-        aktualizujDate();
-        aktualizujKomorki();
         try {
             sql = new SQLSerializer();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -336,6 +324,25 @@ public class UIController implements Initializable {
             exceptionAlert.setContentText("Błąd tworzenia połączenia z bazą danych: "+ex.getLocalizedMessage());
             exceptionAlert.showAndWait();
         }
+        if(saveOnExit==true&&sql!=null){
+            try {
+                sql.connect();
+                model.fromSql(sql);
+                sql.closeConnection();
+            } catch (ClassNotFoundException | SQLException ex) {
+                Alert exceptionAlert = new Alert(AlertType.ERROR);
+                exceptionAlert.setContentText("Błąd otwierania połączenia z bazą danych: "+ex.getLocalizedMessage());
+                exceptionAlert.showAndWait();
+            } catch (ParseException ex) {
+                Alert exceptionAlert = new Alert(AlertType.ERROR);
+                exceptionAlert.setContentText("Błąd deserializacji danych: "+ex.getLocalizedMessage());
+                exceptionAlert.showAndWait();
+            }
+        }
+
+        aktualizujDate();
+        aktualizujKomorki();
+        
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {

@@ -33,7 +33,7 @@ public class OptionsSerializer {
         
     }
     catch(FileNotFoundException fileNotFound) {
-            System.err.println("ERROR: While Creating or Opening the File kalendarz.ics");
+            System.err.println("ERROR: While Creating or Opening the File options");
         } catch (IOException ex) {
             Logger.getLogger(ICalendarSerializer.class.getName()).log(Level.SEVERE, null, ex);
         }

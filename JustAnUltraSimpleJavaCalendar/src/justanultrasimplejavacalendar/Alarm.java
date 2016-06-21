@@ -45,7 +45,7 @@ public class Alarm {
                 listaPrzypomnien.add(zdarzenie.getAlarm());
                 if(zdarzenie.getDateEnd().after(new Date()))
                 {
-                    zdarzenie.getAlarm().setPowtorzenia(0);
+                    zdarzenie.getAlarm().setPowtorzenia(-1);
                 }
                 Timer timer = new Timer();
                 PrzypomnienieTask task = new PrzypomnienieTask(zdarzenie.getAlarm(), zdarzenie);
@@ -53,7 +53,10 @@ public class Alarm {
                     Calendar d = new GregorianCalendar();
                     d.setTime(zdarzenie.getDateStart());
                     d.add(Calendar.MINUTE, -(zdarzenie.getAlarm().getTrigger()));
-                    timer.schedule(task, d.getTime(), zdarzenie.getAlarm().getCzasTrwania()*1000*60); 
+                    if(zdarzenie.getAlarm().getPowtorzenia() == null || zdarzenie.getAlarm().getPowtorzenia()<=0)
+                        timer.schedule(task, d.getTime());
+                    else
+                        timer.schedule(task, d.getTime(), zdarzenie.getAlarm().getCzasTrwania()*1000*60); 
 
             }
             
@@ -65,15 +68,19 @@ public class Alarm {
         private Zdarzenie zdarzenie;
         @Override
         public void run() {
-            
-           if(przypomnienie.getPowtorzenia()>0&&zdarzenie.getDateEnd().before(new Date())){
-               Platform.runLater(() -> {
-               PrzypomnienieAlert t = new PrzypomnienieAlert(zdarzenie);
-               przypomnienie.setPowtorzenia(przypomnienie.getPowtorzenia()-1);
-               });
-           }else{
-        this.cancel();
-           }
+            if(przypomnienie.getPowtorzenia() == null && zdarzenie.getDateEnd().before(new Date())) {
+                Platform.runLater(() -> {
+                    PrzypomnienieAlert t = new PrzypomnienieAlert(zdarzenie);
+                });
+                this.cancel();
+            } else if(przypomnienie.getPowtorzenia()>-1&&zdarzenie.getDateEnd().before(new Date())){
+                Platform.runLater(() -> {
+                    PrzypomnienieAlert t = new PrzypomnienieAlert(zdarzenie);
+                    przypomnienie.setPowtorzenia(przypomnienie.getPowtorzenia()-1);
+                });
+            }else{
+                this.cancel();
+            }
         }
 
         @Override
@@ -85,12 +92,11 @@ public class Alarm {
             przypomnienie = p;
             zdarzenie = z;
             Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                cancel();
-            }
-           });
-        }
-        
+                @Override
+                public void run() {
+                    cancel();
+                }
+            });
+        }        
     }
 }

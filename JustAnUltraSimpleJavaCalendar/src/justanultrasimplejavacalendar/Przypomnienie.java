@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
 public class Przypomnienie {
     private String opis;
     private int trigger;
-    private int czasTrwania;
+    private Integer czasTrwania;
     private Zdarzenie zdarzenie;
     private String uid;
 
@@ -34,21 +34,24 @@ public class Przypomnienie {
         this.uid = uid;
     }
     
-    public Przypomnienie(String opis, int powtorzenia, Zdarzenie zdarzenie, int trigger, int czas) {
+    public Przypomnienie(String opis, Integer powtorzenia, Zdarzenie zdarzenie, int trigger, Integer czas) {
         this.opis = opis;
         this.powtorzenia = powtorzenia;
+        if(this.powtorzenia!=null)
+            if(this.powtorzenia==0)
+                this.powtorzenia=null;
         this.zdarzenie = zdarzenie;
         this.trigger = trigger;
         this.czasTrwania = czas;
         this.uid = zdarzenie.getUid();
     }
-    private int powtorzenia;
+    private Integer powtorzenia;
 
     public Przypomnienie() {
         opis = "";
         trigger = 30;
-        czasTrwania = 15;
-        powtorzenia=5;
+        czasTrwania = null;
+        powtorzenia = null;
     }
     @XmlElement(name = "opis")
     public String getOpis() {
@@ -67,19 +70,19 @@ public class Przypomnienie {
         this.trigger = trigger;
     }
     @XmlElement(name = "czastrwania")
-    public int getCzasTrwania() {
+    public Integer getCzasTrwania() {
         return czasTrwania;
     }
 
-    public void setCzasTrwania(int czasTrwania) {
+    public void setCzasTrwania(Integer czasTrwania) {
         this.czasTrwania = czasTrwania;
     }
     @XmlElement(name = "powtorzenia")
-    public int getPowtorzenia() {
+    public Integer getPowtorzenia() {
         return powtorzenia;
     }
 
-    public void setPowtorzenia(int powtorzenia) {
+    public void setPowtorzenia(Integer powtorzenia) {
         this.powtorzenia = powtorzenia;
     }
     @XmlTransient
