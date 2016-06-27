@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.*;
+import java.util.TimeZone;
 import javafx.util.Duration;
 
 /**
@@ -26,6 +27,11 @@ public class ICalendarSerializer {
     public final static String CRLF  = "" + CR + LF;
     private final DateFormat fmtDate = new SimpleDateFormat("yyyyMMdd");
     private final DateFormat fmtTime = new SimpleDateFormat("HHmmss");
+    public ICalendarSerializer() {
+        TimeZone timeZone = TimeZone.getTimeZone("UTC");
+        fmtTime.setTimeZone(timeZone);
+        fmtDate.setTimeZone(timeZone);
+    }
     public void setDir(String dir){
         SERIALIZED_FILE_NAME = dir + "/" + SERIALIZED_FILE_NAME;
     }
@@ -52,10 +58,10 @@ public class ICalendarSerializer {
                 writer.write(fmtDate.format(event.getDtstamp().getTime()).concat("T").concat(fmtTime.format(event.getDtstamp().getTime())).concat("Z"));
                 writer.write(CRLF);
                 writer.write("DTSTART:");
-                writer.write(fmtDate.format(event.getDtstart().getTime()).concat("T").concat(fmtTime.format(event.getDtstamp().getTime())).concat("Z"));
+                writer.write(fmtDate.format(event.getDtstart().getTime()).concat("T").concat(fmtTime.format(event.getDtstart().getTime())).concat("Z"));
                 writer.write(CRLF);
                 writer.write("DTEND:");
-                writer.write(fmtDate.format(event.getDtend().getTime()).concat("T").concat(fmtTime.format(event.getDtstamp().getTime())).concat("Z"));
+                writer.write(fmtDate.format(event.getDtend().getTime()).concat("T").concat(fmtTime.format(event.getDtend().getTime())).concat("Z"));
                 writer.write(CRLF);
                 writer.write("SUMMARY:");
                 writer.write(event.getSummary());
